@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>NEELKUND — Micro Finance</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ef;--bg2:#ede9e1;--bg3:#e2ddd4;
+  --ink:#0e1117;--ink2:#1e2530;--ink3:#374151;
+  --teal:#00796b;--teal2:#004d40;--teal3:#b2dfdb;
+  --gold:#d4a017;--gold2:#fef3c7;--gold3:#92400e;
+  --red:#c0392b;--red2:#fee2e2;--red3:#991b1b;
+  --green:#16a34a;--green2:#dcfce7;
+  --blue:#1d4ed8;--blue2:#dbeafe;
+  --orange:#ea580c;--orange2:#ffedd5;
+  --purple:#7c3aed;--purple2:#ede9fe;
+  --white:#fff;--muted:#6b7280;--muted2:#9ca3af;--muted3:#d1d5db;
+  --shadow:0 1px 3px rgba(0,0,0,.07),0 4px 16px rgba(0,0,0,.06);
+  --shadow2:0 4px 16px rgba(0,0,0,.1),0 16px 48px rgba(0,0,0,.08);
+  --shadow3:0 8px 32px rgba(0,0,0,.14),0 24px 64px rgba(0,0,0,.1);
+  --r:12px;--r2:18px;--r3:24px;
+  --f:'DM Sans',sans-serif;--fd:'Playfair Display',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:14px;line-height:1.55;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:var(--bg3);}
+::-webkit-scrollbar-thumb{background:var(--muted3);border-radius:2px;}
+input,select,textarea,button{font-family:var(--f);}
+#loadWrap{position:fixed;inset:0;background:var(--ink2);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .5s;}
+#loadWrap.out{opacity:0;pointer-events:none;}
+.load-logo{font-family:var(--fd);font-size:60px;color:#fff;letter-spacing:-2px;margin-bottom:6px;}
+.load-name{font-size:11px;letter-spacing:5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-bottom:32px;}
+.load-bar{width:160px;height:2px;background:rgba(255,255,255,.1);border-radius:1px;overflow:hidden;}
+.load-fill{height:100%;background:var(--teal);animation:lf 1.4s ease infinite;}
+@keyframes lf{0%{width:0;margin-left:0}50%{width:60%}100%{width:0;margin-left:160px}}
+/* ACCESS BLOCKED */
+.access-blocked{position:fixed;inset:0;background:var(--ink2);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:8000;color:#fff;text-align:center;padding:24px;}
+.ab-icon{font-size:56px;margin-bottom:12px;}
+.ab-title{font-family:var(--fd);font-size:22px;margin-bottom:8px;}
+.ab-sub{font-size:13px;opacity:.5;margin-bottom:6px;}
+.ab-override{margin-top:18px;padding:10px 18px;background:rgba(0,121,107,.2);border:1px solid rgba(0,121,107,.4);border-radius:var(--r);display:flex;flex-direction:column;gap:7px;align-items:center;}
+/* LOGIN */
+.login-shell{display:flex;min-height:100vh;}
+.login-panel{width:460px;flex-shrink:0;background:var(--white);padding:56px 48px;display:flex;flex-direction:column;justify-content:center;}
+.login-art{flex:1;background:var(--ink2);position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.login-art-bg{position:absolute;inset:0;background:linear-gradient(145deg,#00695c 0%,#004d40 35%,#0e1117 100%);}
+.login-art-mark{position:relative;font-family:var(--fd);font-size:96px;color:#fff;letter-spacing:-4px;line-height:1;}
+.login-art-sub{position:relative;font-size:11px;letter-spacing:6px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-top:10px;}
+.login-art-tag{position:relative;margin-top:28px;font-size:15px;color:rgba(255,255,255,.5);max-width:280px;text-align:center;font-weight:300;line-height:1.6;}
+.india-bar{display:flex;height:4px;width:120px;border-radius:4px;overflow:hidden;margin-top:32px;}
+.ib1{flex:1;background:#FF9933;}.ib2{flex:1;background:#fff;}.ib3{flex:1;background:#138808;}
+.lf-group{display:flex;flex-direction:column;gap:4px;margin-bottom:16px;}
+.lf-group label{font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.8px;text-transform:uppercase;}
+.lf-group input{background:var(--bg);border:1.5px solid var(--bg3);border-radius:var(--r);padding:11px 14px;font-size:14px;color:var(--ink);outline:none;transition:border .2s;}
+.lf-group input:focus{border-color:var(--teal);background:#fff;}
+.lerr{background:var(--red2);border:1px solid #fca5a5;border-radius:8px;padding:10px 14px;color:var(--red);font-size:13px;margin-bottom:14px;display:none;}
+/* TOOLBAR */
+.tb{background:var(--ink2);position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.25);}
+.tb-top{height:52px;display:flex;align-items:center;padding:0 16px;gap:8px;}
+.tb-brand{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.tb-mark{font-family:var(--fd);font-size:22px;color:#fff;}
+.tb-sep{width:1px;height:20px;background:rgba(255,255,255,.12);}
+.tb-co{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.3);text-transform:uppercase;}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.branch-sw-wrap{background:rgba(0,121,107,.15);border:1px solid rgba(0,121,107,.3);border-radius:10px;padding:4px 10px;}
+.branch-sw-label{font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,.3);text-transform:uppercase;}
+.branch-sw-wrap select{background:transparent;border:none;color:#fff;font-size:12px;font-weight:700;font-family:var(--f);outline:none;cursor:pointer;}
+.branch-sw-wrap select option{background:var(--ink2);}
+.fund-pill{background:rgba(0,121,107,.2);border:1px solid rgba(0,121,107,.35);border-radius:10px;padding:4px 12px;text-align:right;}
+.fp-l{font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.3);text-transform:uppercase;}
+.fp-v{font-size:15px;font-weight:800;color:#fff;line-height:1.2;}
+.u-chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:30px;padding:3px 10px 3px 3px;}
+.u-av{width:26px;height:26px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;}
+.u-nm{font-size:11px;font-weight:600;color:rgba(255,255,255,.7);}
+.rt{font-size:9px;padding:2px 6px;border-radius:20px;font-weight:800;}
+.rt-admin{background:rgba(212,160,23,.2);color:var(--gold);}
+.rt-partner{background:rgba(29,78,216,.2);color:#93c5fd;}
+.rt-manager{background:rgba(0,121,107,.2);color:#80cbc4;}
+.rt-agent{background:rgba(107,114,128,.18);color:#d1d5db;}
+.tb-logout{background:transparent;border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:5px 10px;color:rgba(255,255,255,.4);font-size:11px;font-weight:600;cursor:pointer;}
+.tb-logout:hover{color:#fff;border-color:rgba(255,255,255,.3);}
+.tb-nav{display:flex;overflow-x:auto;gap:0;border-top:1px solid rgba(255,255,255,.06);padding:0 8px;}
+.tb-nav::-webkit-scrollbar{display:none;}
+.nav-i{padding:11px 13px;font-size:12px;font-weight:600;color:rgba(255,255,255,.4);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;}
+.nav-i:hover{color:rgba(255,255,255,.75);}
+.nav-i.on{color:#fff;border-color:var(--teal);}
+.pg{display:none;padding:20px 24px;max-width:1500px;margin:0 auto;}
+.pg.on{display:block;}
+.ph{display:flex;align-items:flex-start;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
+.ph-txt h2{font-family:var(--fd);font-size:22px;color:var(--ink);}
+.ph-txt p{font-size:13px;color:var(--muted);margin-top:2px;}
+.ph-acts{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px;}
+.kpi{background:var(--white);border:1px solid var(--bg3);border-radius:var(--r2);padding:15px 17px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.kpi.k-teal::before{background:var(--teal);}.kpi.k-gold::before{background:var(--gold);}
+.kpi.k-green::before{background:var(--green);}.kpi.k-red::before{background:var(--red);}
+.kpi.k-blue::before{background:var(--blue);}.kpi.k-orange::before{background:var(--orange);}
+.kpi.k-purple::before{background:var(--purple);}
+.ki{font-size:19px;margin-bottom:5px;}
+.kl{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px;}
+.kv{font-size:21px;font-weight:800;line-height:1;}
+.ks{font-size:11px;color:var(--muted);margin-top:3px;}
+.k-teal .kv{color:var(--teal);}.k-gold .kv{color:var(--gold3);}
+.k-green .kv{color:var(--green);}.k-red .kv{color:var(--red);}
+.k-blue .kv{color:var(--blue);}.k-orange .kv{color:var(--orange);}
+.k-purple .kv{color:var(--purple);}
+.panel{background:var(--white);border:1px solid var(--bg3);border-radius:var(--r2);box-shadow:var(--shadow);}
+.pnh{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--bg3);}
+.pnh h3{font-size:13px;font-weight:700;color:var(--ink);flex:1;}
+.pnb{padding:14px 16px;}
+.tw{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+thead th{background:var(--bg);color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:9px 11px;text-align:left;border-bottom:2px solid var(--bg3);white-space:nowrap;}
+tbody td{padding:10px 11px;border-bottom:1px solid var(--bg2);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--bg);}
+tr.tr-done{background:#f0fdf4;}tr.tr-done:hover td{background:#dcfce7;}
+tr.tr-ov{background:#fef2f2;}tr.tr-ov:hover td{background:#fee2e2;}
+tr.tr-warn{background:#fefce8;}tr.tr-warn:hover td{background:#fef9c3;}
+tr.tr-adv{background:#eff6ff;}tr.tr-adv:hover td{background:#dbeafe;}
+tr.tr-early{background:#f0fdf4;border-left:3px solid var(--green);}
+/* Customer flag rows */
+tr.tr-flag-red td{border-left:4px solid var(--red)!important;}
+tr.tr-flag-yellow td:first-child{border-left:4px solid #eab308!important;}
+tr.tr-blocked{background:#fef2f2;opacity:.7;}
+.bd{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:10px;font-weight:700;}
+.bd-teal{background:#e0f2f1;color:var(--teal2);}.bd-gold{background:var(--gold2);color:var(--gold3);}
+.bd-red{background:var(--red2);color:var(--red3);}.bd-green{background:var(--green2);color:#065f46;}
+.bd-blue{background:var(--blue2);color:#1e40af;}.bd-muted{background:var(--bg2);color:var(--muted);}
+.bd-orange{background:var(--orange2);color:var(--orange);}
+.bd-purple{background:var(--purple2);color:var(--purple);}
+.bd-new{background:#fef3c7;color:#92400e;}.bd-rep{background:#d1fae5;color:#065f46;}
+.pbar{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;min-width:60px;}
+.pbar-f{height:100%;border-radius:3px;transition:width .3s;}
+.btn{display:inline-flex;align-items:center;gap:5px;border:none;border-radius:var(--r);padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;font-family:var(--f);white-space:nowrap;}
+.btn-teal{background:var(--teal);color:#fff;}.btn-teal:hover{background:var(--teal2);}
+.btn-gold{background:var(--gold);color:#fff;}
+.btn-ghost{background:transparent;border:1.5px solid var(--bg3);color:var(--muted);}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal);}
+.btn-red{background:var(--red2);border:1.5px solid #fca5a5;color:var(--red);}
+.btn-green{background:var(--green2);border:1.5px solid #86efac;color:#065f46;}
+.btn-blue{background:var(--blue2);border:1.5px solid #93c5fd;color:var(--blue);}
+.btn-purple{background:var(--purple2);border:1.5px solid #c4b5fd;color:var(--purple);}
+.btn-sm{padding:5px 11px;font-size:12px;border-radius:8px;}
+.btn-xs{padding:3px 7px;font-size:11px;border-radius:6px;}
+.etb{min-width:68px;height:26px;border-radius:6px;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--f);padding:0 7px;}
+.et-paid{background:#dcfce7;color:#065f46;border:1.5px solid #86efac;}
+.et-due{background:#fee2e2;color:var(--red);border:1.5px solid #fca5a5;}
+.et-adv{background:var(--blue2);color:var(--blue);border:1.5px solid #93c5fd;}
+.et-warn{background:#fef9c3;color:#854d0e;border:1.5px solid #fde047;}
+.ov{display:none;position:fixed;inset:0;background:rgba(14,17,23,.65);backdrop-filter:blur(8px);z-index:400;align-items:center;justify-content:center;padding:16px;}
+.ov.on{display:flex;}
+.modal{background:var(--white);border-radius:var(--r3);width:100%;max-width:680px;max-height:95vh;overflow-y:auto;box-shadow:var(--shadow3);}
+.mh{padding:16px 22px 13px;border-bottom:1px solid var(--bg3);display:flex;align-items:center;gap:10px;position:sticky;top:0;background:var(--white);z-index:2;}
+.mh h3{font-family:var(--fd);font-size:18px;color:var(--ink);flex:1;}
+.mx{width:28px;height:28px;background:var(--bg2);border:none;border-radius:7px;cursor:pointer;font-size:15px;color:var(--muted);}
+.mb{padding:18px 22px;}.mf{padding:13px 22px;border-top:1px solid var(--bg3);display:flex;gap:8px;justify-content:flex-end;}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fg.full{grid-column:1/-1;}
+.fg label{font-size:10px;font-weight:700;color:var(--ink3);letter-spacing:.7px;text-transform:uppercase;}
+.fg input,.fg select,.fg textarea{background:var(--bg);border:1.5px solid var(--bg3);border-radius:var(--r);padding:9px 11px;font-size:13px;color:var(--ink);outline:none;transition:all .2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--teal);background:#fff;}
+.doc-prev{margin-top:5px;border-radius:8px;overflow:hidden;border:2px solid var(--bg3);display:none;max-width:160px;}
+.doc-prev img{width:100%;display:block;}
+.lpb{background:linear-gradient(135deg,#e0f2f1,#f0faf9);border:1.5px solid #80cbc4;border-radius:var(--r);padding:12px;margin-top:3px;}
+.lpr{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px dashed rgba(0,121,107,.15);}
+.lpr:last-child{border-bottom:none;}
+.lpr span{color:var(--muted);}.lpr strong{font-weight:800;}
+.sr{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
+.sb{flex:1;min-width:160px;position:relative;}
+.sb input{width:100%;background:var(--white);border:1.5px solid var(--bg3);border-radius:var(--r);padding:8px 12px 8px 34px;font-size:13px;outline:none;color:var(--ink);}
+.sb input:focus{border-color:var(--teal);}
+.si{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted2);pointer-events:none;font-size:13px;}
+.chips{display:flex;gap:5px;flex-wrap:wrap;}
+.ch{padding:5px 11px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--bg3);color:var(--muted);background:var(--white);}
+.ch.on{background:var(--ink2);border-color:var(--ink2);color:#fff;}
+.pag{display:flex;align-items:center;gap:4px;padding:10px 14px;border-top:1px solid var(--bg3);flex-wrap:wrap;}
+.pb{width:26px;height:26px;border:1.5px solid var(--bg3);background:var(--white);border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;color:var(--muted);font-family:var(--f);}
+.pb:hover,.pb.on{background:var(--ink2);border-color:var(--ink2);color:#fff;}
+.pi{font-size:11px;color:var(--muted);margin-left:auto;}
+.sr2{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bg3);}
+.sr2:last-child{border-bottom:none;}
+.sr2-l{font-size:13px;color:var(--muted);}
+.sr2-v{font-size:14px;font-weight:800;}
+.empty{text-align:center;padding:40px 20px;color:var(--muted);}
+.empty-ic{font-size:36px;margin-bottom:8px;}
+.cust-av{width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid var(--bg3);}
+.cust-av-ph{width:32px;height:32px;border-radius:50%;background:var(--teal3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--teal2);border:2px solid var(--bg3);flex-shrink:0;}
+.tog{position:relative;display:inline-block;width:36px;height:19px;}
+.tog input{opacity:0;width:0;height:0;}
+.ts{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ccc;transition:.3s;border-radius:20px;}
+.ts:before{position:absolute;content:"";height:13px;width:13px;left:3px;bottom:3px;background:white;transition:.3s;border-radius:50%;}
+input:checked+.ts{background:var(--teal);}
+input:checked+.ts:before{transform:translateX(17px);}
+.no-branch{background:linear-gradient(135deg,#fff3cd,#fffbeb);border:2px solid var(--gold);border-radius:var(--r2);padding:28px;text-align:center;margin-bottom:18px;}
+.gps-btn{display:inline-flex;align-items:center;gap:6px;background:var(--blue2);border:1.5px solid #93c5fd;border-radius:var(--r);padding:8px 13px;font-size:13px;font-weight:700;color:var(--blue);cursor:pointer;}
+.cam-btn{display:inline-flex;align-items:center;gap:5px;background:#f3e8ff;border:1.5px solid #d8b4fe;border-radius:var(--r);padding:7px 11px;font-size:12px;font-weight:700;color:#7c3aed;cursor:pointer;}
+.closure-info{background:linear-gradient(135deg,#fef3c7,#fffbeb);border:2px solid var(--gold);border-radius:var(--r2);padding:14px;margin-bottom:14px;}
+.profile-ov{display:none;position:fixed;inset:0;background:rgba(14,17,23,.75);backdrop-filter:blur(10px);z-index:500;overflow-y:auto;padding:16px;}
+.profile-ov.on{display:block;}
+.profile-card{background:var(--white);border-radius:var(--r3);width:100%;max-width:860px;box-shadow:var(--shadow3);margin:auto;}
+.pc-header{background:linear-gradient(135deg,var(--teal2),var(--ink2));border-radius:var(--r3) var(--r3) 0 0;padding:24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+.pc-img{width:76px;height:76px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.3);}
+.pc-img-ph{width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;border:3px solid rgba(255,255,255,.3);flex-shrink:0;}
+.pc-info h2{font-family:var(--fd);font-size:20px;color:#fff;margin-bottom:3px;}
+.pc-info p{font-size:12px;color:rgba(255,255,255,.55);}
+.pc-body{padding:18px;}
+.perm-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:var(--bg);border-radius:10px;border:1px solid var(--bg3);margin-bottom:7px;}
+.agent-card{background:var(--white);border:1px solid var(--bg3);border-radius:var(--r2);padding:16px;box-shadow:var(--shadow);cursor:pointer;transition:all .2s;}
+.agent-card:hover{border-color:var(--teal);transform:translateY(-2px);}
+.agent-av{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--teal2));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;margin-bottom:10px;}
+.agent-name{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.agent-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;}
+.ast{background:var(--bg);border-radius:8px;padding:6px 8px;text-align:center;}
+.ast-v{font-size:13px;font-weight:800;}
+.ast-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.morning-brief{background:linear-gradient(135deg,#004d40,#1e2530);border-radius:var(--r2);padding:18px;color:#fff;margin-bottom:14px;}
+.mb-greeting{font-size:11px;opacity:.5;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.mb-title{font-family:var(--fd);font-size:18px;margin-bottom:12px;}
+.mb-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;}
+.mb-stat{background:rgba(255,255,255,.08);border-radius:10px;padding:10px;text-align:center;}
+.mb-stat-v{font-size:18px;font-weight:800;}
+.mb-stat-l{font-size:10px;opacity:.5;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+.pay-dot{width:18px;height:18px;border-radius:4px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;cursor:help;}
+.pd-paid{background:#dcfce7;color:#065f46;}
+.pd-due{background:#fee2e2;color:var(--red);}
+.pd-adv{background:var(--blue2);color:var(--blue);}
+.pd-warn{background:#fef9c3;color:#854d0e;}
+.agent-detail-ov{display:none;position:fixed;inset:0;background:rgba(14,17,23,.75);backdrop-filter:blur(10px);z-index:500;overflow-y:auto;padding:16px;}
+.agent-detail-ov.on{display:block;}
+.agent-detail-card{background:var(--white);border-radius:var(--r3);width:100%;max-width:900px;box-shadow:var(--shadow3);margin:auto;}
+.tab-bar{display:flex;gap:0;border-bottom:2px solid var(--bg3);margin-bottom:16px;}
+.tab-btn{padding:10px 18px;font-size:13px;font-weight:600;color:var(--muted);background:transparent;border:none;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s;}
+.tab-btn.on{color:var(--teal);border-color:var(--teal);font-weight:800;}
+.late-bar{height:4px;border-radius:2px;margin-top:3px;}
+.lb-ok{background:var(--green);}.lb-warn{background:#eab308;}.lb-late{background:var(--orange);}.lb-overdue{background:var(--red);}
+.sal-input{width:120px;background:var(--bg);border:1.5px solid var(--teal);border-radius:8px;padding:5px 8px;font-size:13px;font-weight:700;color:var(--teal2);outline:none;}
+/* Flag badges */
+.flag-red-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--red);margin-right:4px;vertical-align:middle;}
+.flag-yellow-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#eab308;margin-right:4px;vertical-align:middle;}
+.flag-green-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green);margin-right:4px;vertical-align:middle;}
+/* Blacklist warning */
+.blacklist-warn{background:linear-gradient(135deg,#fef2f2,#fff5f5);border:2px solid var(--red);border-radius:var(--r2);padding:18px;margin-bottom:14px;}
+/* Access time banner */
+.access-banner{background:linear-gradient(135deg,#fff3cd,#fffbeb);border:2px solid var(--gold);border-radius:var(--r);padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--gold3);display:flex;align-items:center;gap:8px;}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--ink2);color:#fff;padding:10px 18px;border-radius:30px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;box-shadow:var(--shadow2);}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+@media print{.tb,.ph-acts,.btn,.etb,.no-print,.tb-nav{display:none!important;}.pg{padding:0!important;}body{background:#fff;}}
+@media(max-width:768px){.login-art{display:none;}.login-panel{width:100%;padding:28px 18px;}.fg2{grid-template-columns:1fr;}.kpi-row{grid-template-columns:1fr 1fr;}.pg{padding:12px 12px;}.fund-pill,.tb-sep,.tb-co{display:none;}}
+</style>
+</head>
+<body>
+<div id="loadWrap">
+  <div class="load-logo">NK</div>
+  <div class="load-name">Neelkund Micro Finance</div>
+  <div class="load-bar"><div class="load-fill"></div></div>
+</div>
+
+<!-- ACCESS BLOCKED SCREEN -->
+<div id="accessBlocked" class="access-blocked" style="display:none">
+  <div class="ab-icon">🔒</div>
+  <div class="ab-title">System Locked</div>
+  <div class="ab-sub" id="abMsg">Access restricted during this time.</div>
+  <div class="ab-sub" style="font-size:12px;margin-top:4px" id="abTime"></div>
+  <div class="ab-override">
+    <div style="font-size:12px;opacity:.6;margin-bottom:4px">Admin Override</div>
+    <input type="password" id="abPass" placeholder="Admin password" style="padding:7px 11px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;font-family:var(--f);outline:none;font-size:13px;width:200px">
+    <button onclick="adminOverride()" style="margin-top:5px;background:var(--teal);border:none;border-radius:8px;padding:8px 16px;color:#fff;font-weight:700;font-family:var(--f);cursor:pointer">Unlock →</button>
+  </div>
+</div>
+
+<div id="loginWrap" style="display:none">
+  <div class="login-shell">
+    <div class="login-panel">
+      <div style="margin-bottom:24px"><div style="font-family:var(--fd);font-size:26px;color:var(--teal2)">NEELKUND</div><div style="font-size:10px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-top:2px">Micro Finance</div></div>
+      <h1 style="font-family:var(--fd);font-size:24px;margin-bottom:4px">Welcome back</h1>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:20px">Sign in to continue</p>
+      <div id="lerr" class="lerr"></div>
+      <div class="lf-group"><label>Email</label><input type="email" id="lemail" placeholder="you@neelkund.in" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <div class="lf-group"><label>Password</label><input type="password" id="lpass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="btn btn-teal" style="width:100%;justify-content:center;padding:12px;margin-top:4px" onclick="doLogin()">Sign In →</button>
+      <div style="margin-top:14px;padding:10px;background:var(--bg);border-radius:var(--r);font-size:11px;color:var(--muted);line-height:1.8">
+        <strong>Admin:</strong> admin@neelkund.in / neelkund@admin<br>
+        <strong>Partner:</strong> partner1@neelkund.in / neelkund123<br>
+        <strong>Manager:</strong> manager@neelkund.in / manager123<br>
+        <strong>Agent:</strong> agent@neelkund.in / agent123
+      </div>
+    </div>
+    <div class="login-art">
+      <div class="login-art-bg"></div>
+      <div class="login-art-mark">NK</div>
+      <div class="login-art-sub">Neelkund Micro Finance</div>
+      <div class="login-art-tag">Empowering small businesses across India — one loan at a time.</div>
+      <div class="india-bar"><div class="ib1"></div><div class="ib2"></div><div class="ib3"></div></div>
+    </div>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+  <div class="tb">
+    <div class="tb-top">
+      <div class="tb-brand"><span class="tb-mark">NK</span><div class="tb-sep"></div><span class="tb-co">Neelkund</span></div>
+      <div class="tb-right">
+        <div id="brSwWrap" style="display:none" class="branch-sw-wrap"><div class="branch-sw-label">Branch</div><select id="brSw" onchange="switchBranch(this.value)"></select></div>
+        <div class="fund-pill"><div class="fp-l">Fund</div><div class="fp-v" id="topFund">₹—</div></div>
+        <div class="u-chip"><div class="u-av" id="uAv">?</div><div><div class="u-nm" id="uNm">—</div><div class="rt" id="uRt"></div></div></div>
+        <button class="tb-logout" onclick="doLogout()">Sign Out</button>
+      </div>
+    </div>
+    <nav class="tb-nav" id="tbNav"></nav>
+  </div>
+  <div class="pg" id="pg-dash"></div>
+  <div class="pg" id="pg-loans"></div>
+  <div class="pg" id="pg-coll"></div>
+  <div class="pg" id="pg-agents"></div>
+  <div class="pg" id="pg-salary"></div>
+  <div class="pg" id="pg-exp"></div>
+  <div class="pg" id="pg-fund"></div>
+  <div class="pg" id="pg-users"></div>
+  <div class="pg" id="pg-perms"></div>
+  <div class="pg" id="pg-reports"></div>
+  <div class="pg" id="pg-customers"></div>
+  <div class="pg" id="pg-access"></div>
+  <div class="pg" id="pg-loginlog"></div>
+  <div class="pg" id="pg-about"></div>
+</div>
+
+<!-- MODALS (keeping all from Phase 2A + new ones) -->
+<!-- LOAN MODAL -->
+<div class="ov" id="mLoan">
+<div class="modal" style="max-width:700px">
+  <div class="mh"><span>💳</span><h3>Issue New Loan</h3><button class="mx" onclick="CM('mLoan')">✕</button></div>
+  <div class="mb">
+    <div id="blacklistWarnBox" class="blacklist-warn" style="display:none">
+      <div style="font-weight:800;color:var(--red);margin-bottom:6px">🚫 BLACKLISTED / BLOCKED CUSTOMER</div>
+      <div id="blacklistWarnMsg" style="font-size:13px;color:var(--red3)"></div>
+      <div style="margin-top:8px;font-size:12px;color:var(--muted)">Manager approval required to proceed.</div>
+      <button class="btn btn-red btn-sm" style="margin-top:8px" onclick="requestManagerApproval()">Request Approval</button>
+    </div>
+    <div style="background:var(--bg);border-radius:var(--r);padding:11px;margin-bottom:14px">
+      <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:7px">Customer ID</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <input id="nl_cid" type="text" placeholder="ID or search..." style="flex:1;min-width:140px;background:#fff;border:1.5px solid var(--bg3);border-radius:var(--r);padding:8px 11px;font-size:13px;color:var(--ink);outline:none;" oninput="liveCustSearch()">
+        <button class="btn btn-ghost btn-sm" onclick="lookupCust()">🔍 Lookup</button>
+        <button class="btn btn-ghost btn-sm" onclick="genCustId()">⚡ Auto</button>
+      </div>
+      <div id="custResult" style="margin-top:6px;font-size:12px;min-height:16px"></div>
+    </div>
+    <div class="fg2">
+      <div class="fg"><label>Full Name *</label><input type="text" id="nl_name" placeholder="Customer full name"></div>
+      <div class="fg"><label>Mobile *</label><input type="tel" id="nl_phone" placeholder="98XXXXXXXX"></div>
+      <div class="fg"><label>Loan Amount *</label>
+        <select id="nl_amt" onchange="updateLPrev()">
+          <option value="">— Select —</option>
+          <option value="2000">₹2,000 · ₹50/day</option>
+          <option value="4000">₹4,000 · ₹100/day</option>
+          <option value="6000">₹6,000 · ₹150/day</option>
+          <option value="8000">₹8,000 · ₹200/day</option>
+          <option value="10000">₹10,000 · ₹250/day</option>
+        </select>
+      </div>
+      <div class="fg"><label>Start Date *</label><input type="date" id="nl_date"></div>
+      <div class="fg"><label>Branch *</label><select id="nl_branch"></select></div>
+      <div class="fg"><label>Collection Agent *</label><select id="nl_agent_sel"><option value="">— Select —</option></select></div>
+      <div class="fg"><label>Shop / Address</label><input type="text" id="nl_addr" placeholder="Shop or locality"></div>
+      <div class="fg"><label>Guarantor</label><input type="text" id="nl_guar" placeholder="Optional"></div>
+      <!-- KYC SECTION -->
+      <div class="fg full" style="grid-column:1/-1">
+        <div style="background:linear-gradient(135deg,#e0f2f1,#f0faf9);border:2px solid #80cbc4;border-radius:var(--r2);padding:14px;margin-top:4px">
+          <div style="font-size:11px;font-weight:800;color:var(--teal2);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">🪪 KYC Documents</div>
+
+          <!-- Customer Photo -->
+          <div style="margin-bottom:14px;background:#fff;border-radius:var(--r);padding:11px;border:1.5px solid var(--bg3)">
+            <div style="font-size:11px;font-weight:800;color:var(--ink3);letter-spacing:.7px;text-transform:uppercase;margin-bottom:7px">📷 Customer Photo *</div>
+            <div style="display:flex;gap:7px;align-items:center;flex-wrap:wrap">
+              <button type="button" class="cam-btn" onclick="triggerCam('nl_photo');document.getElementById('nl_photo').onchange=function(){prevDoc(this,'pPhoto','pPhotoImg')}">📷 Camera</button>
+              <input type="file" id="nl_photo" accept="image/*" capture="environment" style="flex:1;min-width:120px;background:var(--bg);border:1.5px solid var(--bg3);border-radius:8px;padding:5px 8px;font-size:11px;" onchange="prevDoc(this,'pPhoto','pPhotoImg')">
+            </div>
+            <div class="doc-prev" id="pPhoto"><img id="pPhotoImg" alt="" style="border-radius:8px"></div>
+          </div>
+
+          <!-- Aadhaar -->
+          <div style="margin-bottom:14px;background:#fff;border-radius:var(--r);padding:11px;border:1.5px solid var(--bg3)">
+            <div style="font-size:11px;font-weight:800;color:var(--ink3);letter-spacing:.7px;text-transform:uppercase;margin-bottom:7px">🪪 Aadhaar Card</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+              <div>
+                <div style="font-size:10px;color:var(--muted);margin-bottom:3px">Aadhaar Number</div>
+                <input type="text" id="nl_aadh" placeholder="XXXX XXXX XXXX" maxlength="14"
+                  style="width:100%;background:var(--bg);border:1.5px solid var(--bg3);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:700;letter-spacing:1px;outline:none;font-family:var(--f)"
+                  oninput="checkDuplicateKYC('aadh',this.value)">
+              </div>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="font-size:10px;color:var(--muted)">Aadhaar Photo</div>
+                <div style="display:flex;gap:5px;flex-wrap:wrap">
+                  <button type="button" class="cam-btn" style="padding:5px 9px;font-size:11px" onclick="triggerCam('nl_aadhImg');document.getElementById('nl_aadhImg').onchange=function(){prevDoc(this,'pAadh','pAadhImg')}">📷 Cam</button>
+                  <input type="file" id="nl_aadhImg" accept="image/*" capture="environment" style="flex:1;min-width:80px;background:var(--bg);border:1.5px solid var(--bg3);border-radius:8px;padding:4px 6px;font-size:10px;" onchange="prevDoc(this,'pAadh','pAadhImg')">
+                </div>
+              </div>
+            </div>
+            <div class="doc-prev" id="pAadh"><img id="pAadhImg" alt="" style="border-radius:8px;max-width:200px"></div>
+          </div>
+
+          <!-- PAN -->
+          <div style="background:#fff;border-radius:var(--r);padding:11px;border:1.5px solid var(--bg3)">
+            <div style="font-size:11px;font-weight:800;color:var(--ink3);letter-spacing:.7px;text-transform:uppercase;margin-bottom:7px">🪪 PAN Card</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+              <div>
+                <div style="font-size:10px;color:var(--muted);margin-bottom:3px">PAN Number</div>
+                <input type="text" id="nl_pan" placeholder="ABCDE1234F" maxlength="10"
+                  style="width:100%;background:var(--bg);border:1.5px solid var(--bg3);border-radius:8px;padding:8px 10px;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;outline:none;font-family:var(--f)"
+                  oninput="checkDuplicateKYC('pan',this.value)">
+              </div>
+              <div style="display:flex;flex-direction:column;gap:5px">
+                <div style="font-size:10px;color:var(--muted)">PAN Photo</div>
+                <div style="display:flex;gap:5px;flex-wrap:wrap">
+                  <button type="button" class="cam-btn" style="padding:5px 9px;font-size:11px" onclick="triggerCam('nl_panImg');document.getElementById('nl_panImg').onchange=function(){prevDoc(this,'pPan','pPanImg')}">📷 Cam</button>
+                  <input type="file" id="nl_panImg" accept="image/*" capture="environment" style="flex:1;min-width:80px;background:var(--bg);border:1.5px solid var(--bg3);border-radius:8px;padding:4px 6px;font-size:10px;" onchange="prevDoc(this,'pPan','pPanImg')">
+                </div>
+              </div>
+            </div>
+            <div class="doc-prev" id="pPan"><img id="pPanImg" alt="" style="border-radius:8px;max-width:200px"></div>
+          </div>
+
+        </div>
+      </div>
+      <div id="kycWarn" class="fg full" style="display:none">
+        <div style="background:var(--red2);border:1.5px solid #fca5a5;border-radius:var(--r);padding:10px 13px;font-size:12px;color:var(--red3)" id="kycWarnMsg"></div>
+      </div>
+      <div class="fg full">
+        <label>📍 GPS Location</label>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:3px">
+          <button type="button" class="gps-btn" id="gpsBtn" onclick="getGPS()">📍 Capture</button>
+          <input type="text" id="nl_loc" placeholder="Or paste Google Maps link" style="flex:1;min-width:140px;">
+        </div>
+        <div id="gpsStatus" style="font-size:11px;margin-top:4px"></div>
+      </div>
+      <div class="fg full" id="lprevWrap" style="display:none"><div class="lpb" id="lprev"></div></div>
+    </div>
+  </div>
+  <div class="mf"><button class="btn btn-ghost" onclick="CM('mLoan')">Cancel</button><button class="btn btn-teal" id="saveLoanBtn" onclick="saveLoan()">✅ Issue Loan</button></div>
+</div>
+</div>
+
+<!-- EARLY CLOSURE -->
+<div class="ov" id="mClose">
+<div class="modal" style="max-width:440px">
+  <div class="mh"><span>⚡</span><h3>Early Loan Closure</h3><button class="mx" onclick="CM('mClose')">✕</button></div>
+  <div class="mb">
+    <div class="closure-info" id="closureInfo"></div>
+    <div class="fg" style="margin-bottom:11px"><label>Amount Received (₹) *</label><input type="number" id="cl_amt" placeholder="Outstanding amount"></div>
+    <div class="fg"><label>Note</label><textarea id="cl_note" rows="2" placeholder="Optional"></textarea></div>
+  </div>
+  <div class="mf"><button class="btn btn-ghost" onclick="CM('mClose')">Cancel</button><button class="btn btn-green" onclick="confirmClosure()">⚡ Confirm & Close</button></div>
+</div>
+</div>
+
+<!-- ADVANCE -->
+<div class="ov" id="mAdv">
+<div class="modal" style="max-width:440px">
+  <div class="mh"><span>⏩</span><h3>Advance Payment</h3><button class="mx" onclick="CM('mAdv')">✕</button></div>
+  <div class="mb">
+    <div id="advInfo" style="background:var(--blue2);border:1.5px solid #93c5fd;border-radius:var(--r);padding:12px;margin-bottom:14px;font-size:13px;color:var(--blue)"></div>
+    <div class="fg" style="margin-bottom:11px"><label>Advance Days *</label><input type="number" id="adv_days" min="1" max="10" placeholder="e.g. 3" oninput="updateAdvPreview()"></div>
+    <div id="advPreview" style="font-size:13px;color:var(--muted);min-height:20px"></div>
+  </div>
+  <div class="mf"><button class="btn btn-ghost" onclick="CM('mAdv')">Cancel</button><button class="btn btn-blue" onclick="confirmAdv()">⏩ Confirm</button></div>
+</div>
+</div>
+
+<!-- AGENT DETAIL OVERLAY -->
+<div class="agent-detail-ov" id="agentDetailOv" onclick="if(event.target===this)closeAgentDetail()">
+  <div class="agent-detail-card">
+    <div id="agentDetailHeader" style="background:linear-gradient(135deg,var(--teal2),var(--ink2));border-radius:var(--r3) var(--r3) 0 0;padding:24px;"></div>
+    <div style="padding:18px" id="agentDetailBody"></div>
+    <div style="padding:14px 18px;border-top:1px solid var(--bg3);display:flex;gap:8px;justify-content:flex-end" class="no-print">
+      <button class="btn btn-ghost" onclick="closeAgentDetail()">Close</button>
+      <button class="btn btn-teal" onclick="printAgentReport()">🖨️ Print</button>
+      <button class="btn btn-green" onclick="downloadAgentReport()">⬇️ Download</button>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOMER PROFILE -->
+<div class="profile-ov" id="profileOv" onclick="if(event.target===this)closeProfile()">
+  <div class="profile-card"><div class="pc-header" id="pcHeader"></div><div class="pc-body" id="pcBody"></div></div>
+</div>
+
+<!-- SALARY EDIT MODAL -->
+<div class="ov" id="mSalary">
+<div class="modal" style="max-width:400px">
+  <div class="mh"><span>💰</span><h3>Edit Salary</h3><button class="mx" onclick="CM('mSalary')">✕</button></div>
+  <div class="mb"><div class="fg2">
+    <div class="fg full"><label>Employee</label><input type="text" id="sal_name" disabled style="background:var(--bg2)"></div>
+    <div class="fg"><label>Monthly Salary (₹) *</label><input type="number" id="sal_amt" placeholder="0"></div>
+    <div class="fg"><label>Effective From</label><input type="date" id="sal_from"></div>
+    <div class="fg full"><label>Note</label><input type="text" id="sal_note" placeholder="Optional reason"></div>
+  </div></div>
+  <div class="mf"><button class="btn btn-ghost" onclick="CM('mSalary')">Cancel</button><button class="btn btn-teal" onclick="saveSalary()">💾 Update</button></div>
+</div>
+</div>
+
+<!-- EXPENSE MODAL -->
+<div class="ov" id="mExp">
+<div class="modal" style="max-width:540px">
+  <div class="mh"><span>💸</span><h3>Record Expense</h3><button class="mx" onclick="CM('mExp')">✕</button></div>
+  <div class="mb"><div class="fg2">
+    <div class="fg full"><label>Description *</label><input type="text" id="ex_desc" placeholder="e.g. Manager Salary — April"></div>
+    <div class="fg"><label>Amount (₹) *</label><input type="number" id="ex_amt" placeholder="0"></div>
+    <div class="fg"><label>Category</label><select id="ex_cat"><option>Salary</option><option>Incentive</option><option>Office Rent</option><option>Travel</option><option>Stationery</option><option>Other</option></select></div>
+    <div class="fg"><label>Date</label><input type="date" id="ex_date"></div>
+    <div class="fg"><label>Paid To</label><input type="text" id="ex_to" placeholder="Name / vendor"></div>
+    <div class="fg full"><label>Note</label><textarea id="ex_note" rows="2" placeholder="Optional"></textarea></div>
+  </div></div>
+  <div class="mf"><button class="btn btn-ghost" onclick="CM('mExp')">Cancel</button><button class="btn btn-teal" onclick="saveExp()">Save</button></div>
+</div>
+</div>
+
+<!-- FUND ADD -->
+<div class="ov" id="mFund">
+<div class="modal" style="max-width:420px">
+  <div class="mh"><span>🏦</span><h3>Add Capital</h3><button class="mx" onclick="CM('mFund')">✕</button></div>
+  <div class="mb"><div class="fg2">
+    <div class="fg"><label>Amount (₹) *</label><input type="number" id="fa_amt" placeholder="0"></div>
+    <div class="fg"><label>Date</label><input type="date" id="fa_date"></div>
+    <div class="fg full"><label>Branch *</label><select id="fa_branch"></select></div>
+    <div class="fg full"><label>Investor / Source *</label><input type="text" id="fa_investor" placeholder="Partner name or source"></div>
+    <div class="fg full"><label>Note</label><input type="text" id="fa_note" placeholder="Optional"></div>
+  </div></div>
+  <div class="mf"><button class="btn btn-ghost" onclick="CM('mFund')">Cancel</button><button class="btn btn-teal" onclick="saveFundAdd()">Add Capital</button></div>
+</div>
+</div>
+
+<!-- TRANSFER -->
+<div class="ov" id="mTransfer">
+<div class="modal" style="max-width:420px">
+  <div class="mh"><span>🔄</span><h3>Transfer Fund</h3><button class="mx" onclick="CM('mTransfer')">✕</button></div>
+  <div class="mb">
+    <div id="transferInfo" style="margin-bottom:12px;font-size:13px;color:var(--muted)"></div>
+    <div class="fg2">
+      <div class="fg"><label>From *</label><select id="tr_from" onchange="updateTransferInfo()"></select></div>
+      <div class="fg"><label>To *</label><select id="tr_to" onchange="updateTransferInfo()"></select></div>
+      <div class="fg"><label>Amount (₹) *</label><input type="number" id="tr_amt" placeholder="0"></div>
+      <div class="fg full"><label>Note</label><input type="text" id="tr_note" placeholder="Optional"></div>
+    </div>
+  </div>
+  <div class="mf"><button class="btn btn-ghost" onclick="CM('mTransfer')">Cancel</button><button class="btn btn-teal" onclick="doTransfer()">🔄 Transfer</button></div>
+</div>
+</div>
+
+<!-- USER MODAL -->
+<div class="ov" id="mUser">
+<div class="modal" style="max-width:620px">
+  <div class="mh"><span>👤</span><h3>Add Team Member</h3><button class="mx" onclick="CM('mUser')">✕</button></div>
+  <div class="mb"><div class="fg2">
+    <div class="fg"><label>Full Name *</label><input type="text" id="u_name" placeholder="Full name"></div>
+    <div class="fg"><label>Email *</label><input type="email" id="u_email" placeholder="user@neelkund.in"></div>
+    <div class="fg"><label>Password *</label><input type="text" id="u_pass" placeholder="Set password"></div>
+    <div class="fg"><label>Role *</label><select id="u_role" onchange="updateUserRoleNote()"><option value="partner">Partner</option><option value="manager">Branch Manager</option><option value="agent">Collection Agent</option></select></div>
+    <div class="fg"><label>Branch</label><select id="u_branch"></select></div>
+    <div class="fg"><label>Employee ID</label><input type="text" id="u_empid" placeholder="NK-AGT-001"></div>
+    <div class="fg"><label>Phone</label><input type="tel" id="u_phone" placeholder="Mobile"></div>
+    <div class="fg"><label>Join Date</label><input type="date" id="u_join"></div>
+    <div class="fg"><label>Monthly Salary (₹)</label><input type="number" id="u_salary" placeholder="0"></div>
+    <div class="fg"><label>Aadhaar No.</label><input type="text" id="u_aadh" placeholder="XXXX XXXX XXXX"></div>
+    <div class="fg"><label>PAN No.</label><input type="text" id="u_pan" placeholder="ABCDE1234F"></div>
+    <div class="fg">
+      <label>📷 Employee Photo</label>
+      <div style="display:flex;gap:5px;margin-top:3px">
+        <button type="button" class="cam-btn" onclick="triggerCam('u_photo','uPhotoP','uPhotoI')">📷</button>
+        <input type="file" id="u_photo" accept="image/*" style="flex:1;background:var(--bg);border:1.5px solid var(--bg3);border-radius:8px;padding:5px 7px;font-size:11px;" onchange="prevDoc(this,'uPhotoP','uPhotoI')">
+      </div>
+      <div class="doc-prev" id="uPhotoP"><img id="uPhotoI" alt=""></div>
+    </div>
+    <div class="fg">
+      <label>📄 Aadhaar Photo</label>
+      <div style="display:flex;gap:5px;margin-top:3px">
+        <button type="button" class="cam-btn" onclick="triggerCam('u_aadhImg','uAadhP','uAadhI')">📷</button>
+        <input type="file" id="u_aadhImg" accept="image/*" style="flex:1;background:var(--bg);border:1.5px solid var(--bg3);border-radius:8px;padding:5px 7px;font-size:11px;" onchange="prevDoc(this,'uAadhP','uAadhI')">
+      </div>
+      <div class="doc-prev" id="uAadhP"><img id="uAadhI" alt=""></div>
+    </div>
+  </div>
+  <div id="uRoleNote" style="margin-top:10px;padding:9px 11px;border-radius:8px;font-size:12px;background:var(--bg2);color:var(--muted)"></div>
+  </div>
+  <div class="mf"><button class="btn btn-ghost" onclick="CM('mUser')">Cancel</button><button class="btn btn-teal" onclick="saveUser()">Add Member</button></div>
+</div>
+</div>
+
+<!-- BRANCH MODAL -->
+<div class="ov" id="mBranch">
+<div class="modal" style="max-width:420px">
+  <div class="mh"><span>🏢</span><h3>Add Branch</h3><button class="mx" onclick="CM('mBranch')">✕</button></div>
+  <div class="mb"><div class="fg2">
+    <div class="fg"><label>Branch Name *</label><input type="text" id="br_name" placeholder="Kolkata North"></div>
+    <div class="fg"><label>Branch Code *</label><input type="text" id="br_code" placeholder="KOL-N" style="text-transform:uppercase"></div>
+    <div class="fg full"><label>Address</label><input type="text" id="br_addr"></div>
+    <div class="fg"><label>Manager</label><input type="text" id="br_mgr"></div>
+    <div class="fg"><label>Phone</label><input type="tel" id="br_ph"></div>
+  </div></div>
+  <div class="mf"><button class="btn btn-ghost" onclick="CM('mBranch')">Cancel</button><button class="btn btn-teal" onclick="saveBranch()">Add</button></div>
+</div>
+</div>
+
+<!-- CORRECT EMI -->
+<div class="ov" id="mCorr">
+<div class="modal" style="max-width:420px">
+  <div class="mh"><span>✏️</span><h3>Correct EMI Entry</h3><button class="mx" onclick="CM('mCorr')">✕</button></div>
+  <div class="mb">
+    <div style="background:var(--red2);border:1px solid #fca5a5;border-radius:8px;padding:9px 11px;margin-bottom:12px;font-size:12px;color:var(--red3)">⚠️ All corrections are logged.</div>
+    <div class="fg2">
+      <div class="fg"><label>Customer ID / Loan ID</label><input type="text" id="cor_id" placeholder="NK-XXXX"></div>
+      <div class="fg"><label>Date</label><input type="date" id="cor_date"></div>
+      <div class="fg"><label>Set To</label><select id="cor_st"><option value="due">Due (reverse)</option><option value="paid">Paid</option></select></div>
+      <div class="fg full"><label>Reason *</label><textarea id="cor_reason" rows="2" placeholder="Why?"></textarea></div>
+    </div>
+  </div>
+  <div class="mf"><button class="btn btn-ghost" onclick="CM('mCorr')">Cancel</button><button class="btn btn-gold" onclick="saveCorrection()">Apply</button></div>
+</div>
+</div>
+
+<!-- FLAG CUSTOMER MODAL (Feature 30) -->
+<div class="ov" id="mFlag">
+<div class="modal" style="max-width:480px">
+  <div class="mh"><span>🚩</span><h3>Flag Customer</h3><button class="mx" onclick="CM('mFlag')">✕</button></div>
+  <div class="mb">
+    <div id="flagCustInfo" style="background:var(--bg);border-radius:var(--r);padding:10px;margin-bottom:12px;font-size:13px;font-weight:700"></div>
+    <div class="fg2">
+      <div class="fg full"><label>Flag Color *</label>
+        <select id="flag_color">
+          <option value="red">🔴 Red — High Risk / Defaulter</option>
+          <option value="yellow">🟡 Yellow — Watch / Caution</option>
+          <option value="green">🟢 Green — Good Customer</option>
+          <option value="none">⬜ Remove Flag</option>
+        </select>
+      </div>
+      <div class="fg full"><label>Reason (mandatory for Red/Yellow) *</label><textarea id="flag_reason" rows="3" placeholder="Explain why you're flagging this customer..."></textarea></div>
+    </div>
+  </div>
+  <div class="mf"><button class="btn btn-ghost" onclick="CM('mFlag')">Cancel</button><button class="btn btn-teal" onclick="saveFlag()">🚩 Apply Flag</button></div>
+</div>
+</div>
+
+<!-- MANAGER APPROVAL MODAL (Feature 28) -->
+<div class="ov" id="mApproval">
+<div class="modal" style="max-width:440px">
+  <div class="mh"><span>✅</span><h3>Manager Approval</h3><button class="mx" onclick="CM('mApproval')">✕</button></div>
+  <div class="mb">
+    <div style="background:var(--red2);border:1.5px solid #fca5a5;border-radius:var(--r);padding:12px;margin-bottom:14px;font-size:13px;color:var(--red3)">
+      ⚠️ This customer is blacklisted / 90+ days defaulter. Manager password required to proceed.
+    </div>
+    <div id="approvalCustInfo" style="background:var(--bg);border-radius:var(--r);padding:10px;margin-bottom:12px;font-size:13px;font-weight:700"></div>
+    <div class="fg"><label>Manager Password *</label><input type="password" id="appr_pass" placeholder="Manager password"></div>
+    <div class="fg" style="margin-top:10px"><label>Approval Note *</label><textarea id="appr_note" rows="2" placeholder="Reason for approval..."></textarea></div>
+  </div>
+  <div class="mf"><button class="btn btn-ghost" onclick="CM('mApproval')">Cancel</button><button class="btn btn-green" onclick="confirmApproval()">✅ Approve & Proceed</button></div>
+</div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══ STORAGE ══
+const LS={
+  get:k=>{try{return JSON.parse(localStorage.getItem('nk7_'+k)||'null');}catch(e){return null;}},
+  set:(k,v)=>{try{localStorage.setItem('nk7_'+k,JSON.stringify(v));}catch(e){}},
+  push:(k,v)=>{const a=LS.get(k)||[];a.push(v);LS.set(k,a);return v;},
+  update:(k,id,p)=>{const a=LS.get(k)||[];const i=a.findIndex(x=>x.id===id);if(i>=0){a[i]={...a[i],...p};LS.set(k,a);return a[i];}return null;},
+  del:(k,id)=>{LS.set(k,(LS.get(k)||[]).filter(x=>x.id!==id));},
+  col:k=>LS.get(k)||[]
+};
+const nkId=()=>Math.random().toString(36).slice(2,8)+Date.now().toString(36);
+const nowTs=()=>({seconds:Math.floor(Date.now()/1000),time:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})});
+
+if(!LS.get('seeded')){
+  LS.set('users',[
+    {id:'admin-001',email:'admin@neelkund.in',password:'neelkund@admin',name:'Admin',role:'admin',branch:'',empId:'NK-ADMIN-001'},
+    {id:'partner-001',email:'partner1@neelkund.in',password:'neelkund123',name:'Partner 1',role:'partner',branch:'',empId:'NK-PTN-001'},
+    {id:'manager-001',email:'manager@neelkund.in',password:'manager123',name:'Branch Manager',role:'manager',branch:'',empId:'NK-MGR-001',salary:15000,joinDate:'2024-01-01'},
+    {id:'agent-001',email:'agent@neelkund.in',password:'agent123',name:'Rajesh Kumar',role:'agent',branch:'',empId:'NK-AGT-001',salary:12000,joinDate:'2024-01-01'},
+    {id:'agent-002',email:'agent2@neelkund.in',password:'agent123',name:'Suresh Das',role:'agent',branch:'',empId:'NK-AGT-002',salary:11000,joinDate:'2024-02-01'},
+  ]);
+  LS.set('branches',[]);
+  LS.set('branchFunds',{});
+  LS.set('rolePerms',{
+    partner:{dashboard:true,loans_view:true,coll_view:true,agents_view:true,salary_edit:true,reports:true,about:true,loan_add:false,loan_delete:false,emi_mark:false,emi_correct:false,expense_view:true,expense_add:false,fund_view:false,fund_add:false,users_view:false,loginlog:false,customers_view:true},
+    manager:{dashboard:true,loans_view:true,coll_view:true,agents_view:true,salary_edit:false,reports:true,about:true,loan_add:true,loan_delete:true,emi_mark:true,emi_correct:true,expense_view:true,expense_add:true,fund_view:false,fund_add:false,users_view:false,loginlog:false,customers_view:true},
+    agent:{dashboard:true,loans_view:true,coll_view:true,agents_view:false,salary_edit:false,reports:false,about:false,loan_add:false,loan_delete:false,emi_mark:true,emi_correct:true,expense_view:false,expense_add:false,fund_view:false,fund_add:false,users_view:false,loginlog:false,customers_view:false}
+  });
+  // Default access settings (Feature 29)
+  LS.set('accessSettings',{
+    enabled:true,
+    startHour:8,startMin:0,
+    endHour:22,endMin:0,
+    offDays:[],  // array of date strings 'YYYY-MM-DD'
+    holidays:[], // upcoming holidays set by admin
+    overrideUntil:null // timestamp
+  });
+  LS.set('seeded',true);
+}
+
+const PERM_DEFS=[
+  {k:'dashboard',l:'📊 Dashboard'},{k:'loans_view',l:'💳 View Loans'},{k:'loan_add',l:'➕ Add Loan'},
+  {k:'loan_delete',l:'🗑️ Delete Loan'},{k:'emi_mark',l:'✅ Mark EMI'},{k:'emi_correct',l:'✏️ Correct EMI'},
+  {k:'coll_view',l:'🗓️ Collection'},{k:'agents_view',l:'👥 Agents'},{k:'salary_edit',l:'💰 Edit Salary'},
+  {k:'expense_view',l:'💸 View Expenses'},{k:'expense_add',l:'📝 Add Expense'},
+  {k:'fund_view',l:'🏦 View Fund'},{k:'fund_add',l:'💰 Add Capital'},
+  {k:'reports',l:'📋 Reports'},{k:'about',l:'🏢 About'},{k:'loginlog',l:'🔐 Login Log'},
+  {k:'users_view',l:'👥 Team'},{k:'customers_view',l:'👤 Customers'},
+];
+
+const INR=n=>'₹'+Number(n||0).toLocaleString('en-IN');
+const today=()=>new Date().toISOString().split('T')[0];
+const fmtD=d=>d?new Date(d+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}):'—';
+const dFrom=s=>Math.floor((new Date(today())-new Date(s+'T00:00:00'))/86400000);
+const clamp=(v,a,b)=>Math.min(Math.max(v,a),b);
+const DAYS=46,PAGE=50;
+const EMIS={2000:50,4000:100,6000:150,8000:200,10000:250};
+
+let CU=null,branches=[],lFilter='All',lSearch='',lPage=0,collDate=today();
+let activeBranch='all',closureLoanId='',advLoanId='',_collTab='all',_salaryEditId='';
+let agentDetailDate=today();
+let _flagLoanId='',_flagCustId='',_approvalCustId='',_approvalLoanBlocked=false;
+
+const DB={
+  getAll:col=>LS.col(col),
+  get:(col,id)=>LS.col(col).find(x=>x.id===id)||null,
+  add:(col,data)=>{const id=nkId();LS.push(col,{...data,id});return id;},
+  set:(col,id,data)=>{const a=LS.col(col);const i=a.findIndex(x=>x.id===id);if(i>=0)a[i]={...data,id};else a.push({...data,id});LS.set(col,a);},
+  update:(col,id,p)=>LS.update(col,id,p),
+  delete:(col,id)=>LS.del(col,id),
+};
+
+function getPerms(role){if(role==='admin')return Object.fromEntries(PERM_DEFS.map(p=>[p.k,true]));return LS.get('rolePerms')?.[role]||{};}
+function can(k){return CU?.role==='admin'||!!(getPerms(CU?.role)[k]);}
+function getAgents(){return LS.col('users').filter(u=>u.role==='agent');}
+function getBF(id){return(LS.get('branchFunds')||{})[id]||0;}
+function setBF(id,v){const bf=LS.get('branchFunds')||{};bf[id]=v;LS.set('branchFunds',bf);}
+function refreshTopFund(){const bf=LS.get('branchFunds')||{};const t=activeBranch==='all'?Object.values(bf).reduce((s,v)=>s+(v||0),0):(bf[activeBranch]||0);document.getElementById('topFund').textContent=INR(t);return t;}
+function updateFund(brId,delta,desc,investor=''){if(!brId||brId==='all')brId=branches[0]?.id||'main';setBF(brId,getBF(brId)+delta);DB.add('fundLog',{amount:delta,balance:getBF(brId),desc,branch:brId,investor,date:today(),ts:nowTs(),by:CU?.id});refreshTopFund();}
+function getAdvanceDays(loan){const ts=today(),startD=new Date(loan.startDate+'T00:00:00');let adv=0;for(let i=0;i<DAYS;i++){const d=new Date(startD.getTime()+i*86400000).toISOString().split('T')[0];if(d>ts&&loan.payments?.[d]==='paid')adv++;}return adv;}
+function getLateStatus(loan,dateStr){const startD=new Date(loan.startDate+'T00:00:00');const checkD=new Date(dateStr+'T00:00:00');let missed=0;for(let i=1;i<=5;i++){const d=new Date(checkD.getTime()-i*86400000).toISOString().split('T')[0];const dayNo=Math.floor((new Date(d)-startD)/86400000);if(dayNo<0||dayNo>=DAYS)break;if(loan.payments?.[d]==='paid')break;missed++;}return missed;}
+
+// Feature 27: Get overdue days after 46
+function getOverdueDays(loan){if(!loan.completed&&!loan.closedEarly){const d=dFrom(loan.startDate);if(d>DAYS)return d-DAYS;}return 0;}
+
+// Feature 28: Check if customer is 90+ blacklisted
+function isBlacklisted(customerId){
+  const loans=DB.getAll('loans').filter(l=>l.customerId===customerId);
+  for(const l of loans){
+    if(getOverdueDays(l)>=90)return{blocked:true,reason:`90+ days overdue (${getOverdueDays(l)} days)`,loan:l};
+    if(l.flag==='red')return{blocked:true,reason:l.flagReason||'Red flagged by manager',loan:l};
+  }
+  return{blocked:false};
+}
+
+// Feature 29: Access control check
+function checkAccessAllowed(role){
+  if(role==='admin'||role==='partner')return{allowed:true};
+  const acc=LS.get('accessSettings')||{};
+  if(!acc.enabled)return{allowed:true};
+  // Check override
+  if(acc.overrideUntil&&Date.now()<acc.overrideUntil)return{allowed:true,override:true};
+  const now=new Date();
+  const h=now.getHours(),m=now.getMinutes();
+  const totalMin=h*60+m;
+  const startMin=(acc.startHour||8)*60+(acc.startMin||0);
+  const endMin=(acc.endHour||22)*60+(acc.endMin||0);
+  if(totalMin<startMin||totalMin>=endMin){
+    const st=`${String(acc.startHour||8).padStart(2,'0')}:${String(acc.startMin||0).padStart(2,'0')}`;
+    const en=`${String(acc.endHour||22).padStart(2,'0')}:${String(acc.endMin||0).padStart(2,'0')}`;
+    return{allowed:false,reason:`System available ${st} – ${en} only`,time:now.toLocaleTimeString('en-IN')};
+  }
+  // Check holidays
+  const todayStr=today();
+  if(acc.offDays?.includes(todayStr)||acc.holidays?.includes(todayStr)){
+    return{allowed:false,reason:'Today is a holiday / office closed',time:todayStr};
+  }
+  return{allowed:true};
+}
+
+// Feature 30: Flag a customer
+function openFlagModal(loanId,customerId){
+  if(CU?.role!=='manager'&&CU?.role!=='admin'){toast('⛔ Manager/Admin only');return;}
+  _flagLoanId=loanId;_flagCustId=customerId;
+  const l=DB.get('loans',loanId);
+  document.getElementById('flagCustInfo').innerHTML=`${l?.name||'—'} · ${customerId}`;
+  document.getElementById('flag_color').value=l?.flag||'none';
+  document.getElementById('flag_reason').value=l?.flagReason||'';
+  OM('mFlag');
+}
+function saveFlag(){
+  const color=document.getElementById('flag_color').value;
+  const reason=document.getElementById('flag_reason').value.trim();
+  if((color==='red'||color==='yellow')&&!reason){toast('⚠️ Reason required for Red/Yellow');return;}
+  const loans=DB.getAll('loans').filter(l=>l.customerId===_flagCustId);
+  loans.forEach(l=>DB.update('loans',l.id,{flag:color==='none'?null:color,flagReason:color==='none'?'':reason,flaggedBy:CU?.id,flaggedByName:CU?.name,flaggedAt:today()}));
+  CM('mFlag');toast(`🚩 Flagged as ${color.toUpperCase()}`);refreshCurrentPage();
+}
+
+// Feature 28: Manager approval
+function requestManagerApproval(){
+  document.getElementById('approvalCustInfo').innerHTML=document.getElementById('flagCustInfo')?.innerHTML||'—';
+  CM('mLoan');OM('mApproval');
+}
+function confirmApproval(){
+  const pass=document.getElementById('appr_pass').value;
+  const note=document.getElementById('appr_note').value.trim();
+  const mgr=LS.col('users').find(u=>u.role==='manager'&&u.password===pass);
+  if(!mgr){toast('⛔ Wrong manager password');return;}
+  if(!note){toast('⚠️ Reason required');return;}
+  DB.add('approvalLog',{custId:_approvalCustId,approvedBy:mgr.id,approvedByName:mgr.name,note,date:today(),ts:nowTs()});
+  _approvalLoanBlocked=false;
+  CM('mApproval');
+  document.getElementById('blacklistWarnBox').style.display='none';
+  OM('mLoan');
+  toast(`✅ Approved by ${mgr.name}`);
+}
+
+function CM(id){document.getElementById(id)?.classList.remove('on');}
+function OM(id){document.getElementById(id)?.classList.add('on');}
+function toast(msg,dur=2800){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),dur);}
+function noBranchHtml(){return`<div class="no-branch"><div style="font-size:32px;margin-bottom:8px">🏢</div><div style="font-family:var(--fd);font-size:17px;color:var(--gold3);margin-bottom:7px">No Branch Added</div><p style="color:var(--muted);font-size:13px;margin-bottom:13px">Add your first branch to get started.</p>${CU?.role==='admin'?`<button class="btn btn-teal" onclick="OM('mBranch')">+ Add Branch</button>`:'<p style="font-size:12px;color:var(--muted)">Ask your Admin.</p>'}</div>`;}
+function refreshCurrentPage(){const cur=document.querySelector('.pg.on')?.id?.replace('pg-','');if(cur)goPage(cur);}
+function triggerCam(fid){const el=document.getElementById(fid);if(el){el.setAttribute('capture','environment');el.click();}}
+function prevDoc(inp,pid,iid){if(!inp.files[0])return;const r=new FileReader();r.onload=e=>{document.getElementById(iid).src=e.target.result;document.getElementById(pid).style.display='block';};r.readAsDataURL(inp.files[0]);}
+function saveImg(fileId,path){return new Promise(res=>{const f=document.getElementById(fileId)?.files[0];if(!f){res('');return;}const r=new FileReader();r.onload=e=>{LS.set('img_'+path.replace(/[^a-z0-9]/gi,'_'),e.target.result);res(e.target.result);};r.readAsDataURL(f);});}
+function getGPS(){const st=document.getElementById('gpsStatus'),btn=document.getElementById('gpsBtn');if(!navigator.geolocation){st.innerHTML='<span style="color:var(--red);font-size:11px">❌ Not supported</span>';return;}btn.textContent='⏳ Getting...';btn.disabled=true;navigator.geolocation.getCurrentPosition(pos=>{const lat=pos.coords.latitude.toFixed(6),lng=pos.coords.longitude.toFixed(6);const link=`https://www.google.com/maps?q=${lat},${lng}`;document.getElementById('nl_loc').value=link;st.innerHTML=`<span style="color:var(--green);font-size:11px">✅ <a href="${link}" target="_blank" style="color:var(--teal)">View</a></span>`;btn.textContent='📍 ✅';btn.disabled=false;},()=>{st.innerHTML='<span style="color:var(--red);font-size:11px">❌ Denied</span>';btn.textContent='📍 Capture';btn.disabled=false;});}
+
+// ══ DUPLICATE KYC CHECK ══
+function checkDuplicateKYC(type,val){
+  val=val.trim().replace(/\s/g,'');
+  if(val.length<6){document.getElementById('kycWarn').style.display='none';return;}
+  const loans=DB.getAll('loans');
+  let found=null;
+  if(type==='aadh')found=loans.find(l=>l.aadhaarNum&&l.aadhaarNum.replace(/\s/g,'')===val);
+  if(type==='pan')found=loans.find(l=>l.panNum&&l.panNum===val.toUpperCase());
+  const warn=document.getElementById('kycWarn'),msg=document.getElementById('kycWarnMsg');
+  if(found){
+    warn.style.display='block';
+    // Also check blacklist
+    const bl=isBlacklisted(found.customerId);
+    const blTxt=bl.blocked?` ⚠️ <strong style="color:var(--red)">BLACKLISTED: ${bl.reason}</strong>`:'';
+    msg.innerHTML=`⚠️ <strong>${type==='aadh'?'Aadhaar':'PAN'}</strong> already used! Customer: <strong>${found.name}</strong> (${found.customerId})${blTxt}`;
+    // Check blacklist for loan blocking
+    if(bl.blocked){
+      _approvalCustId=found.customerId;
+      _approvalLoanBlocked=true;
+      const bx=document.getElementById('blacklistWarnBox'),bm=document.getElementById('blacklistWarnMsg');
+      bx.style.display='block';
+      bm.textContent=`${found.name} (${found.customerId}) — ${bl.reason}`;
+    }
+  } else {
+    warn.style.display='none';
+    document.getElementById('blacklistWarnBox').style.display='none';
+    _approvalLoanBlocked=false;
+  }
+}
+
+// ══ BOOT ══
+function bootApp(){
+  const lw=document.getElementById('loadWrap');
+  if(lw){lw.classList.add('out');setTimeout(()=>{lw.style.display='none';},500);}
+  showLogin();
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(bootApp,800));
+}else{
+  setTimeout(bootApp,800);
+}
+
+function showLogin(){document.getElementById('loginWrap').style.display='block';document.getElementById('app').style.display='none';document.getElementById('accessBlocked').style.display='none';}
+
+function doLogin(){
+  const em=document.getElementById('lemail').value.trim(),pw=document.getElementById('lpass').value;
+  const er=document.getElementById('lerr');er.style.display='none';
+  if(!em||!pw){er.textContent='Enter email and password.';er.style.display='block';return;}
+  const u=LS.col('users').find(x=>x.email===em&&x.password===pw);
+  if(!u){er.textContent='Invalid credentials.';er.style.display='block';return;}
+  // Feature 29: Check access time for non-admin/partner
+  if(u.role!=='admin'&&u.role!=='partner'){
+    const acc=checkAccessAllowed(u.role);
+    if(!acc.allowed){
+      // Show blocked screen
+      document.getElementById('loginWrap').style.display='none';
+      document.getElementById('accessBlocked').style.display='flex';
+      document.getElementById('abMsg').textContent=acc.reason;
+      document.getElementById('abTime').textContent=`Current time: ${acc.time}`;
+      window._pendingLoginUser=u;
+      return;
+    }
+  }
+  completeLogin(u);
+}
+
+function adminOverride(){
+  const pass=document.getElementById('abPass').value;
+  const admin=LS.col('users').find(u=>u.role==='admin'&&u.password===pass);
+  if(!admin){toast('⛔ Wrong admin password');return;}
+  // Set override for 8 hours
+  const acc=LS.get('accessSettings')||{};
+  acc.overrideUntil=Date.now()+8*3600000;
+  LS.set('accessSettings',acc);
+  document.getElementById('accessBlocked').style.display='none';
+  if(window._pendingLoginUser)completeLogin(window._pendingLoginUser);
+}
+
+function completeLogin(u){
+  CU={...u};
+  document.getElementById('uAv').textContent=(CU.name||'?')[0].toUpperCase();
+  document.getElementById('uNm').textContent=CU.name;
+  const rt=document.getElementById('uRt');rt.textContent=CU.role.toUpperCase();rt.className='rt rt-'+CU.role;
+  LS.push('loginLog',{id:nkId(),uid:CU.id,name:CU.name,role:CU.role,email:CU.email,dateStr:today(),ts:nowTs()});
+  document.getElementById('loginWrap').style.display='none';
+  document.getElementById('accessBlocked').style.display='none';
+  showApp();
+}
+
+function doLogout(){CU=null;document.getElementById('app').style.display='none';showLogin();}
+
+function showApp(){
+  document.getElementById('app').style.display='block';
+  branches=DB.getAll('branches');
+  activeBranch=(CU?.role==='admin'||CU?.role==='partner')?'all':(CU?.branch||branches[0]?.id||'all');
+  buildNav();buildBranchSwitcher();fillBranchSelects();refreshTopFund();
+}
+
+// ══ NAV ══
+const ALL_PAGES=[
+  {k:'dash',l:'📊 Dashboard',perm:'dashboard'},
+  {k:'loans',l:'💳 Loans',perm:'loans_view'},
+  {k:'coll',l:'🗓️ Collection',perm:'coll_view'},
+  {k:'agents',l:'👥 Agents',perm:'agents_view'},
+  {k:'salary',l:'💰 Salary',perm:'salary_edit'},
+  {k:'exp',l:'💸 Expenses',perm:'expense_view'},
+  {k:'fund',l:'🏦 Fund',perm:'fund_view'},
+  {k:'customers',l:'👤 Customers',perm:'customers_view'},
+  {k:'users',l:'🏢 Team',perm:'users_view'},
+  {k:'perms',l:'🔐 Permissions',perm:'__admin'},
+  {k:'access',l:'⏰ Access Control',perm:'__admin'},
+  {k:'reports',l:'📋 Reports',perm:'reports'},
+  {k:'loginlog',l:'🔑 Log',perm:'loginlog'},
+  {k:'about',l:'🏢 About',perm:'about'},
+];
+function buildNav(){
+  const tabs=ALL_PAGES.filter(t=>CU?.role==='admin'||(t.perm!=='__admin'&&can(t.perm)));
+  document.getElementById('tbNav').innerHTML=tabs.map(t=>`<button class="nav-i" id="tab-${t.k}" onclick="goPage('${t.k}')">${t.l}</button>`).join('');
+  if(tabs.length)goPage(tabs[0].k);
+}
+function goPage(k){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nav-i').forEach(b=>b.classList.remove('on'));
+  const pg=document.getElementById('pg-'+k),tb=document.getElementById('tab-'+k);
+  if(pg)pg.classList.add('on');if(tb)tb.classList.add('on');
+  const renderers={dash:renderDash,loans:renderLoans,coll:renderColl,agents:renderAgents,salary:renderSalary,exp:renderExp,fund:renderFundPg,users:renderUsers,perms:renderPerms,access:renderAccess,reports:renderReports,customers:renderCustomers,loginlog:renderLoginLog,about:renderAbout};
+  renderers[k]?.();
+}
+function buildBranchSwitcher(){
+  const wrap=document.getElementById('brSwWrap'),sw=document.getElementById('brSw');
+  if(!branches.length){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  const canAll=CU?.role==='admin'||CU?.role==='partner';
+  const vis=canAll?branches:branches.filter(b=>b.id===CU?.branch);
+  sw.innerHTML=(canAll?'<option value="all">🌐 All</option>':'')+vis.map(b=>`<option value="${b.id}">${b.name}</option>`).join('');
+  sw.value=activeBranch;
+}
+function switchBranch(val){activeBranch=val;refreshTopFund();const cur=document.querySelector('.pg.on')?.id?.replace('pg-','');if(cur)goPage(cur);}
+function fillBranchSelects(){const opts=branches.map(b=>`<option value="${b.id}">${b.name}</option>`).join('');['nl_branch','u_branch','fa_branch','tr_from','tr_to'].forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML=opts;});}
+function fillAgentSelects(){const agents=getAgents();const el=document.getElementById('nl_agent_sel');if(el)el.innerHTML='<option value="">— Select —</option>'+agents.map(a=>`<option value="${a.id}">${a.name}</option>`).join('');}
+
+// ══ FLAG BADGE HELPER ══
+function flagBadge(flag,reason){
+  if(!flag||flag==='none')return'';
+  const map={red:`<span class="bd bd-red" title="${reason||''}">🔴 Red</span>`,yellow:`<span class="bd bd-gold" title="${reason||''}">🟡 Yellow</span>`,green:`<span class="bd bd-green">🟢 Good</span>`};
+  return map[flag]||'';
+}
+
+// ══ DASHBOARD ══
+function renderDash(){
+  if(!can('dashboard')){document.getElementById('pg-dash').innerHTML=`<div class="empty"><div class="empty-ic">🔒</div><p>Access restricted</p></div>`;return;}
+  if(!branches.length){document.getElementById('pg-dash').innerHTML=noBranchHtml();return;}
+  let loans=DB.getAll('loans');
+  if(activeBranch!=='all')loans=loans.filter(l=>l.branch===activeBranch);
+  const active=loans.filter(l=>!l.completed),ts=today();
+  let tPaid=0,tDue=0,tAdv=0;
+  active.forEach(l=>{const de=dFrom(l.startDate);if(de<0||de>=DAYS)return;const e=EMIS[l.amount]||0;const adv=getAdvanceDays(l);if(l.payments?.[ts]==='paid')tPaid+=e;else if(adv>0)tAdv+=e;else tDue+=e;});
+  const bf=LS.get('branchFunds')||{};
+  const brFund=activeBranch==='all'?Object.values(bf).reduce((s,v)=>s+(v||0),0):(bf[activeBranch]||0);
+  const brName=activeBranch==='all'?'All Branches':(branches.find(b=>b.id===activeBranch)?.name||activeBranch);
+  const overdue90=active.filter(l=>getOverdueDays(l)>=90);
+  const agents=getAgents();
+  document.getElementById('pg-dash').innerHTML=`
+    <div class="ph">
+      <div class="ph-txt"><h2>Dashboard</h2><p>${new Date().toLocaleDateString('en-IN',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})} · ${brName}</p></div>
+      ${can('loan_add')?`<div class="ph-acts"><button class="btn btn-teal" onclick="openLoanModal()">+ New Loan</button>${CU?.role==='admin'?`<button class="btn btn-ghost btn-sm" onclick="openTransferModal()">🔄</button>`:''}</div>`:''}
+    </div>
+    ${overdue90.length?`<div class="access-banner">⚠️ <strong>${overdue90.length} customers</strong> are 90+ days overdue — marked as Blacklisted.</div>`:''}
+    <div class="kpi-row">
+      <div class="kpi k-teal"><div class="ki">🏦</div><div class="kl">Fund</div><div class="kv">${INR(brFund)}</div><div class="ks">${brName}</div></div>
+      <div class="kpi k-gold"><div class="ki">📊</div><div class="kl">Active Loans</div><div class="kv">${active.length}</div></div>
+      <div class="kpi k-green"><div class="ki">✅</div><div class="kl">Collected</div><div class="kv">${INR(tPaid)}</div></div>
+      <div class="kpi k-red"><div class="ki">⏳</div><div class="kl">Pending</div><div class="kv">${INR(tDue)}</div></div>
+      <div class="kpi k-red"><div class="ki">🚫</div><div class="kl">Blacklisted</div><div class="kv">${overdue90.length}</div></div>
+    </div>
+    ${agents.length?`<div style="margin-bottom:16px">
+      <div style="font-size:13px;font-weight:800;margin-bottom:10px">👥 Agent Performance Today</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px">
+        ${agents.map(a=>{const aL=active.filter(l=>l.agent===a.id&&dFrom(l.startDate)>=0&&dFrom(l.startDate)<DAYS);const paid=aL.filter(l=>l.payments?.[ts]==='paid');const due=aL.filter(l=>l.payments?.[ts]!=='paid'&&getAdvanceDays(l)===0);const pAmt=paid.reduce((s,l)=>s+(EMIS[l.amount]||0),0);return`<div class="agent-card" onclick="openAgentDetail('${a.id}','${ts}')"><div class="agent-av">${(a.name||'?')[0]}</div><div class="agent-name">${a.name}</div><div class="agent-stats"><div class="ast"><div class="ast-v" style="color:var(--green)">${INR(pAmt)}</div><div class="ast-l">Collected</div></div><div class="ast"><div class="ast-v" style="color:var(--red)">${due.length}</div><div class="ast-l">Due</div></div></div></div>`;}).join('')}
+      </div>
+    </div>`:''}
+    <div class="panel"><div class="tw">${loanMiniTable(active.slice(0,15))}</div></div>`;
+}
+
+function loanMiniTable(loans){
+  if(!loans.length)return'<div class="empty"><div class="empty-ic">📋</div><p>No active loans</p></div>';
+  const ts=today();
+  return`<table><thead><tr><th>Photo</th><th>ID</th><th>Name</th><th>Loan</th><th>Agent</th><th>Today</th><th>Flag</th><th>⚡</th></tr></thead><tbody>
+  ${loans.map(l=>{
+    const tPaid=l.payments?.[ts]==='paid',late=getLateStatus(l,ts),adv=getAdvanceDays(l),ovDays=getOverdueDays(l);
+    const canT=can('emi_mark')&&!l.completed&&dFrom(l.startDate)>=0&&dFrom(l.startDate)<DAYS;
+    const agentName=LS.col('users').find(u=>u.id===l.agent)?.name||'—';
+    const av=l.photo?`<img src="${l.photo}" class="cust-av">`:`<div class="cust-av-ph">${(l.name||'?')[0]}</div>`;
+    const rowCls=ovDays>=90?'tr-ov tr-flag-red':l.flag==='red'?'tr-flag-red':l.flag==='yellow'?'tr-flag-yellow':late>=2?'tr-ov':late===1?'tr-warn':adv>0&&!tPaid?'tr-adv':'';
+    return`<tr class="${rowCls}">
+      <td>${av}</td>
+      <td><span style="font-weight:800;font-size:11px;color:var(--teal);cursor:pointer;text-decoration:underline" onclick="openProfile('${l.customerId}')">${l.customerId||'—'}</span></td>
+      <td><div style="font-weight:700;font-size:12px">${l.name}${adv>0?`<span class="bd bd-blue" style="margin-left:3px;font-size:9px">+${adv}d</span>`:''}</div>
+        ${late===1?'<div class="late-bar lb-warn"></div>':late>=2?'<div class="late-bar lb-overdue"></div>':adv>0&&!tPaid?'<div class="late-bar lb-ok"></div>':''}
+        ${ovDays>=90?`<div style="font-size:10px;color:var(--red);font-weight:700">🚫 ${ovDays}d overdue</div>`:''}
+      </td>
+      <td style="font-weight:800;color:var(--teal2);font-size:12px">${INR(l.amount)}</td>
+      <td style="font-size:11px;color:var(--muted)">${agentName}</td>
+      <td>${canT?`<button class="etb ${tPaid?'et-paid':adv>0?'et-adv':late===1?'et-warn':'et-due'}" onclick="togglePay('${l.id}','${ts}',this,'dash')">${tPaid?'✅':adv>0?'⏩':late>=1?'⚠️':'❌'}</button>`:adv>0&&!tPaid?'<span class="bd bd-blue" style="font-size:9px">⏩</span>':'—'}</td>
+      <td>${flagBadge(l.flag,l.flagReason)}${(CU?.role==='manager'||CU?.role==='admin')?`<button class="btn btn-ghost btn-xs" style="margin-top:2px" onclick="openFlagModal('${l.id}','${l.customerId}')">🚩</button>`:''}</td>
+      <td>${!l.completed?`<button class="btn btn-green btn-xs" onclick="openClosure('${l.id}')">⚡</button>`:'—'}</td>
+    </tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+// ══ LOANS ══
+function renderLoans(){
+  if(!can('loans_view')){document.getElementById('pg-loans').innerHTML=`<div class="empty"><div class="empty-ic">🔒</div><p>Access restricted</p></div>`;return;}
+  if(!branches.length){document.getElementById('pg-loans').innerHTML=noBranchHtml();return;}
+  document.getElementById('pg-loans').innerHTML=`
+    <div class="ph"><div class="ph-txt"><h2>Loan Register</h2></div>
+    ${can('loan_add')?`<div class="ph-acts"><button class="btn btn-teal" onclick="openLoanModal()">+ New Loan</button>${can('emi_correct')?`<button class="btn btn-ghost btn-sm" onclick="OM('mCorr')">✏️</button>`:''}</div>`:''}
+    </div>
+    <div class="sr">
+      <div class="sb"><span class="si">🔍</span><input type="text" id="lSrch" placeholder="Name, ID, phone, agent..." value="${lSearch}" oninput="lSearch=this.value;lPage=0;fetchLoans()"></div>
+      <div class="chips">${['All','Active','Completed','Overdue','Early Closed','Late','Red Flag','90+ Days'].map(f=>`<div class="ch ${lFilter===f?'on':''}" onclick="lFilter='${f}';lPage=0;fetchLoans()">${f}</div>`).join('')}</div>
+    </div>
+    <div class="panel"><div class="tw" id="lTbl"></div><div id="lPag" class="pag"></div></div>`;
+  fetchLoans();
+}
+
+function fetchLoans(){
+  let loans=DB.getAll('loans');
+  if(activeBranch!=='all')loans=loans.filter(l=>l.branch===activeBranch);
+  if(CU?.role==='agent')loans=loans.filter(l=>l.agent===CU.id);
+  const ts=today();
+  if(lFilter==='Active')loans=loans.filter(l=>!l.completed);
+  else if(lFilter==='Completed')loans=loans.filter(l=>l.completed);
+  else if(lFilter==='Overdue')loans=loans.filter(l=>!l.completed&&dFrom(l.startDate)>=DAYS);
+  else if(lFilter==='Early Closed')loans=loans.filter(l=>l.closedEarly);
+  else if(lFilter==='Late')loans=loans.filter(l=>!l.completed&&getLateStatus(l,ts)>0);
+  else if(lFilter==='Red Flag')loans=loans.filter(l=>l.flag==='red');
+  else if(lFilter==='90+ Days')loans=loans.filter(l=>getOverdueDays(l)>=90);
+  const q=lSearch.trim().toLowerCase();
+  if(q)loans=loans.filter(l=>(l.customerId||'').toLowerCase().includes(q)||(l.name||'').toLowerCase().includes(q)||(l.phone||'').includes(q)||(LS.col('users').find(u=>u.id===l.agent)?.name||'').toLowerCase().includes(q));
+  const tot=loans.length,totPg=Math.ceil(tot/PAGE)||1;
+  lPage=clamp(lPage,0,totPg-1);
+  const sl=loans.slice(lPage*PAGE,(lPage+1)*PAGE);
+  const tbl=document.getElementById('lTbl');if(!tbl)return;
+  tbl.innerHTML=sl.length?`<table><thead><tr>
+    <th>Photo</th><th>ID</th><th>Name</th><th>Mobile</th><th>Loan</th><th>EMI</th><th>Agent</th>
+    <th>Start</th><th>Status</th><th>Outstanding</th><th>Today</th><th>Adv</th><th>Flag</th><th>⚡</th>
+    ${can('loan_delete')?'<th>Del</th>':''}
+  </tr></thead><tbody>${sl.map(l=>loanRowHtml(l,ts)).join('')}</tbody></table>`
+  :'<div class="empty"><div class="empty-ic">🔍</div><p>No loans found</p></div>';
+  const pag=document.getElementById('lPag');if(!pag)return;
+  let h='';for(let i=0;i<Math.min(totPg,10);i++)h+=`<button class="pb ${i===lPage?'on':''}" onclick="lPage=${i};fetchLoans()">${i+1}</button>`;
+  pag.innerHTML=h+`<span class="pi">${tot} total</span>`;
+}
+
+function loanRowHtml(l,ts){
+  const e=EMIS[l.amount]||0,pd=Object.values(l.payments||{}).filter(v=>v==='paid').length;
+  const rem=(DAYS-pd)*e,de=dFrom(l.startDate);
+  const isC=l.completed||pd>=DAYS,isOv=!isC&&de>=DAYS;
+  const tPaid=l.payments?.[ts]==='paid';
+  const canEdit=(CU?.role==='agent'&&l.agent===CU.id)||can('emi_mark');
+  const late=getLateStatus(l,ts),adv=getAdvanceDays(l),ovDays=getOverdueDays(l);
+  const status=isC?(l.closedEarly?'<span class="bd bd-green">⚡ Early</span>':'<span class="bd bd-green">✅ Done</span>'):ovDays>=90?`<span class="bd bd-red">🚫 ${ovDays}d</span>`:isOv?'<span class="bd bd-red">⚠️ Overdue</span>':`<span class="bd bd-blue">Day ${clamp(de+1,1,DAYS)}/${DAYS}</span>`;
+  const agentName=LS.col('users').find(u=>u.id===l.agent)?.name||'—';
+  const av=l.photo?`<img src="${l.photo}" class="cust-av">`:`<div class="cust-av-ph">${(l.name||'?')[0]}</div>`;
+  const rowCls=ovDays>=90?'tr-ov':isC?(l.closedEarly?'tr-early':'tr-done'):late>=2?'tr-ov':late===1?'tr-warn':adv>0&&!tPaid?'tr-adv':'';
+  return`<tr class="${rowCls}${l.flag==='red'?' tr-flag-red':l.flag==='yellow'?' tr-flag-yellow':''}">
+    <td>${av}</td>
+    <td><span style="font-weight:800;font-size:11px;color:var(--teal);cursor:pointer;text-decoration:underline" onclick="openProfile('${l.customerId}')">${l.customerId||'—'}</span></td>
+    <td>
+      <div style="font-weight:700;font-size:12px">${l.name}${l.isRepeat?` <span class="bd bd-rep">C${l.cycleNo||2}</span>`:' <span class="bd bd-new" style="font-size:9px">NEW</span>'}</div>
+      ${adv>0?`<span class="bd bd-blue" style="font-size:9px">⏩ +${adv}d</span>`:''}
+      ${late===1?'<div class="late-bar lb-warn"></div>':late>=2?'<div class="late-bar lb-overdue"></div>':''}
+      ${ovDays>=90?`<div style="font-size:10px;color:var(--red);font-weight:700">🚫 ${ovDays}d overdue</div>`:''}
+      ${isC&&l.closedEarly?'<span class="bd bd-green" style="font-size:9px">⚡ Early</span>':''}
+    </td>
+    <td style="font-size:12px;color:var(--muted)">${l.phone||'—'}</td>
+    <td style="font-weight:800;color:var(--teal2)">${INR(l.amount)}</td>
+    <td style="font-weight:700;color:var(--green)">${INR(e)}</td>
+    <td style="font-size:11px;color:var(--muted)">${agentName}</td>
+    <td style="font-size:11px;color:var(--muted)">${fmtD(l.startDate)}</td>
+    <td>${status}</td>
+    <td style="font-weight:800;color:${isC?'var(--green)':'var(--red)'}">${isC?'₹0':INR(rem)}</td>
+    <td>${canEdit&&!isC&&de>=0&&de<DAYS?`<button class="etb ${tPaid?'et-paid':adv>0?'et-adv':late===1?'et-warn':'et-due'}" onclick="togglePay('${l.id}','${ts}',this,'loans')">${tPaid?'✅':adv>0?'⏩':late>=1?'⚠️':'❌'}</button>`:adv>0&&!tPaid?`<span class="bd bd-blue" style="font-size:9px">⏩</span>`:'—'}</td>
+    <td>${!isC?`<button class="btn btn-blue btn-xs" onclick="openAdv('${l.id}')">⏩+</button>`:'—'}</td>
+    <td>${flagBadge(l.flag,l.flagReason)}${(CU?.role==='manager'||CU?.role==='admin')?`<button class="btn btn-ghost btn-xs" onclick="openFlagModal('${l.id}','${l.customerId}')">🚩</button>`:''}</td>
+    <td>${!isC?`<button class="btn btn-green btn-xs" onclick="openClosure('${l.id}')">⚡</button>`:'—'}</td>
+    ${can('loan_delete')?`<td><button class="btn btn-red btn-xs" onclick="delLoan('${l.id}')">🗑️</button></td>`:''}
+  </tr>`;
+}
+
+// ══ COLLECTION ══
+function renderColl(){
+  if(!branches.length){document.getElementById('pg-coll').innerHTML=noBranchHtml();return;}
+  const isAgent=CU?.role==='agent';
+  document.getElementById('pg-coll').innerHTML=`
+    <div class="ph"><div class="ph-txt"><h2>${isAgent?'My Collection':'Daily Collection'}</h2></div>
+    <div class="ph-acts">
+      <input type="date" id="cdPicker" value="${collDate}" onchange="collDate=this.value;fetchColl()" style="background:#fff;border:1.5px solid var(--bg3);border-radius:var(--r);padding:7px 11px;font-family:var(--f);font-size:13px;outline:none;">
+      <div class="sb" style="max-width:200px"><span class="si">🔍</span><input type="text" id="collSearch" placeholder="ID, name, phone..." oninput="fetchColl()" style="padding-left:32px"></div>
+      <div class="chips">
+        <div class="ch on" id="cTab_all" onclick="setCollTab('all')">All</div>
+        <div class="ch" id="cTab_due" onclick="setCollTab('due')">❌ Due</div>
+        <div class="ch" id="cTab_paid" onclick="setCollTab('paid')">✅ Paid</div>
+        <div class="ch" id="cTab_adv" onclick="setCollTab('adv')">⏩ Adv</div>
+        <div class="ch" id="cTab_late" onclick="setCollTab('late')">⚠️ Late</div>
+      </div>
+      ${can('emi_mark')||isAgent?`<button class="btn btn-ghost btn-sm" onclick="markAllPaid()">✅ All</button>`:''}
+      ${can('emi_correct')||isAgent?`<button class="btn btn-gold btn-sm" onclick="OM('mCorr')">✏️</button>`:''}
+      <button class="btn btn-ghost btn-sm" onclick="printDailyReport()">🖨️</button>
+      <button class="btn btn-teal btn-sm" onclick="downloadDailyReport()">⬇️</button>
+    </div></div>
+    ${isAgent?`<div class="morning-brief"><div class="mb-greeting">Good day, ${CU.name}! 👋</div><div class="mb-title" id="mbTitle">Loading...</div><div class="mb-stats" id="mbStats"></div></div>`:''}
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:13px" id="collKpi"></div>
+    <div class="panel"><div class="tw" id="collTbl"></div></div>`;
+  _collTab='all';
+  if(isAgent)updateAgentBrief();
+  fetchColl();
+}
+
+function setCollTab(tab){
+  _collTab=tab;
+  ['all','due','paid','adv','late'].forEach(t=>{const el=document.getElementById('cTab_'+t);if(el)el.className=`ch ${t===tab?'on':''}`;});
+  fetchColl();
+}
+
+function updateAgentBrief(){
+  const ts=collDate;
+  let loans=DB.getAll('loans').filter(l=>l.agent===CU.id&&!l.completed);
+  loans=loans.filter(l=>{const d=Math.floor((new Date(ts+'T00:00:00')-new Date((l.startDate||today())+'T00:00:00'))/86400000);return d>=0&&d<DAYS;});
+  const paid=loans.filter(l=>l.payments?.[ts]==='paid');
+  const adv=loans.filter(l=>getAdvanceDays(l)>0&&l.payments?.[ts]!=='paid');
+  const due=loans.filter(l=>l.payments?.[ts]!=='paid'&&getAdvanceDays(l)===0);
+  const target=loans.reduce((s,l)=>s+(EMIS[l.amount]||0),0);
+  const collected=paid.reduce((s,l)=>s+(EMIS[l.amount]||0),0);
+  const advAmt=adv.reduce((s,l)=>s+(EMIS[l.amount]||0),0);
+  const el=document.getElementById('mbTitle');if(el)el.textContent=`Today: ${INR(target)} from ${loans.length} customers`;
+  const st=document.getElementById('mbStats');
+  if(st)st.innerHTML=`<div class="mb-stat"><div class="mb-stat-v" style="color:#4ade80">${INR(collected)}</div><div class="mb-stat-l">Collected</div></div><div class="mb-stat"><div class="mb-stat-v" style="color:#93c5fd">${INR(advAmt)}</div><div class="mb-stat-l">Advance</div></div><div class="mb-stat"><div class="mb-stat-v" style="color:#f87171">${INR(Math.max(0,target-collected-advAmt))}</div><div class="mb-stat-l">Remaining</div></div><div class="mb-stat"><div class="mb-stat-v">${due.length}</div><div class="mb-stat-l">Due</div></div>`;
+}
+
+function fetchColl(){
+  const ts=collDate;
+  let loans=DB.getAll('loans').filter(l=>{
+    const d=Math.floor((new Date(ts+'T00:00:00')-new Date((l.startDate||today())+'T00:00:00'))/86400000);
+    return d>=0&&d<DAYS&&!l.completed;
+  });
+  if(activeBranch!=='all')loans=loans.filter(l=>l.branch===activeBranch);
+  if(CU?.role==='agent')loans=loans.filter(l=>l.agent===CU.id);
+  const q=(document.getElementById('collSearch')?.value||'').trim().toLowerCase();
+  if(q)loans=loans.filter(l=>(l.customerId||'').toLowerCase().includes(q)||(l.name||'').toLowerCase().includes(q)||(l.phone||'').includes(q));
+  if(_collTab==='paid')loans=loans.filter(l=>l.payments?.[ts]==='paid');
+  else if(_collTab==='due')loans=loans.filter(l=>l.payments?.[ts]!=='paid'&&getAdvanceDays(l)===0);
+  else if(_collTab==='adv')loans=loans.filter(l=>getAdvanceDays(l)>0&&l.payments?.[ts]!=='paid');
+  else if(_collTab==='late')loans=loans.filter(l=>getLateStatus(l,ts)>0);
+  let pAmt=0,dAmt=0,pCt=0,dCt=0,advCt=0,lateCt=0;
+  loans.forEach(l=>{const e=EMIS[l.amount]||0;if(l.payments?.[ts]==='paid'){pAmt+=e;pCt++;}else if(getAdvanceDays(l)>0)advCt++;else{dAmt+=e;dCt++;if(getLateStatus(l,ts)>0)lateCt++;}});
+  const kpi=document.getElementById('collKpi');
+  if(kpi)kpi.innerHTML=[
+    {c:'k-teal',l:'Customers',v:loans.length,s:''},
+    {c:'k-green',l:'Collected ✅',v:INR(pAmt),s:`${pCt} paid`},
+    {c:'k-red',l:'Pending ❌',v:INR(dAmt),s:`${dCt} due`},
+    {c:'k-orange',l:'Late ⚠️',v:lateCt,s:'customers'},
+  ].map(x=>`<div class="kpi ${x.c}"><div class="kl">${x.l}</div><div class="kv">${x.v}</div>${x.s?`<div class="ks">${x.s}</div>`:''}</div>`).join('');
+  const tbl=document.getElementById('collTbl');if(!tbl)return;
+  if(!loans.length){tbl.innerHTML='<div class="empty"><div class="empty-ic">🗓️</div><p>No loans for this selection</p></div>';return;}
+  tbl.innerHTML=`<table><thead><tr><th>#</th><th>Photo</th><th>ID</th><th>Name</th><th>Phone</th><th>Loan</th><th>EMI</th><th>Day</th><th>Agent</th><th>Status</th><th>Adv</th><th>Flag</th><th>⚡</th></tr></thead>
+  <tbody>${loans.map((l,i)=>{
+    const e=EMIS[l.amount]||0,pd=Object.values(l.payments||{}).filter(v=>v==='paid').length;
+    const rem=(DAYS-pd)*e,dayNo=Math.floor((new Date(ts+'T00:00:00')-new Date(l.startDate+'T00:00:00'))/86400000)+1;
+    const isPaid=l.payments?.[ts]==='paid',late=getLateStatus(l,ts),adv=getAdvanceDays(l);
+    const agName=LS.col('users').find(u=>u.id===l.agent)?.name||'—';
+    const av=l.photo?`<img src="${l.photo}" class="cust-av">`:`<div class="cust-av-ph">${(l.name||'?')[0]}</div>`;
+    const canEdit=(CU?.role==='agent'&&l.agent===CU.id)||can('emi_mark');
+    const rowCls=isPaid?'tr-done':late>=2?'tr-ov':late===1?'tr-warn':adv>0?'tr-adv':'';
+    const payTime=DB.getAll('payLog').find(p=>p.loanId===l.id&&p.date===ts)?.time||'';
+    return`<tr class="${rowCls}${l.flag==='red'?' tr-flag-red':l.flag==='yellow'?' tr-flag-yellow':''}">
+      <td style="color:var(--muted);font-size:11px">${i+1}</td>
+      <td>${av}</td>
+      <td><span style="font-weight:800;font-size:11px;color:var(--teal);cursor:pointer;text-decoration:underline" onclick="openProfile('${l.customerId}')">${l.customerId||'—'}</span></td>
+      <td>
+        <div style="font-weight:700;font-size:12px">${l.name}${adv>0?`<span class="bd bd-blue" style="font-size:9px;margin-left:3px">+${adv}d</span>`:''}</div>
+        ${late===1?'<div class="late-bar lb-warn" style="width:60px"></div>':late>=2?'<div class="late-bar lb-overdue" style="width:60px"></div>':''}
+        ${late>0?`<div style="font-size:10px;color:${late>=2?'var(--red)':'#854d0e'}">⚠️ ${late}d late</div>`:''}
+        ${isPaid&&payTime?`<div style="font-size:10px;color:var(--muted)">🕐 ${payTime}</div>`:''}
+      </td>
+      <td style="font-size:12px">${l.phone||'—'}</td>
+      <td style="font-weight:800;color:var(--teal2)">${INR(l.amount)}</td>
+      <td style="font-weight:700;color:var(--green)">${INR(e)}</td>
+      <td><span class="bd bd-blue">D${dayNo}</span></td>
+      <td style="font-size:11px;color:var(--muted)">${agName}</td>
+      <td>
+        ${canEdit?`<button class="etb ${isPaid?'et-paid':adv>0?'et-adv':late>=1?'et-warn':'et-due'}" onclick="togglePay('${l.id}','${ts}',this,'coll')">${isPaid?'✅':adv>0?'⏩':late>=1?'⚠️':'❌'}</button>`:(isPaid?'<span class="bd bd-green">✅</span>':adv>0?'<span class="bd bd-blue">⏩</span>':late>=1?'<span class="bd bd-gold">⚠️</span>':'<span class="bd bd-red">❌</span>')}
+        <div style="font-size:10px;color:var(--muted)">${INR(rem)} left</div>
+      </td>
+      <td><button class="btn btn-blue btn-xs" onclick="openAdv('${l.id}')">⏩+</button></td>
+      <td>${flagBadge(l.flag,l.flagReason)}${(CU?.role==='manager'||CU?.role==='admin')?`<button class="btn btn-ghost btn-xs" onclick="openFlagModal('${l.id}','${l.customerId}')">🚩</button>`:''}</td>
+      <td>${can('loan_add')||CU?.role==='manager'?`<button class="btn btn-green btn-xs" onclick="openClosure('${l.id}')">⚡</button>`:'—'}</td>
+    </tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+// ══ REPORT BUILDERS ══
+function getCollLoans(dateStr){
+  let loans=DB.getAll('loans').filter(l=>{const d=Math.floor((new Date(dateStr+'T00:00:00')-new Date((l.startDate||today())+'T00:00:00'))/86400000);return d>=0&&d<DAYS&&!l.completed;});
+  if(CU?.role==='agent')loans=loans.filter(l=>l.agent===CU.id);
+  return loans;
+}
+
+function buildReportHTML(dateStr){
+  const loans=getCollLoans(dateStr);
+  const agents=getAgents();
+  const paid=loans.filter(l=>l.payments?.[dateStr]==='paid');
+  const due=loans.filter(l=>l.payments?.[dateStr]!=='paid'&&getAdvanceDays(l)===0);
+  const adv=loans.filter(l=>getAdvanceDays(l)>0&&l.payments?.[dateStr]!=='paid');
+  const pAmt=paid.reduce((s,l)=>s+(EMIS[l.amount]||0),0);
+  const dAmt=due.reduce((s,l)=>s+(EMIS[l.amount]||0),0);
+  let agentBreakdown='';
+  agents.forEach(a=>{const aL=loans.filter(l=>l.agent===a.id);if(!aL.length)return;const aPaid=aL.filter(l=>l.payments?.[dateStr]==='paid');const aDue=aL.filter(l=>l.payments?.[dateStr]!=='paid'&&getAdvanceDays(l)===0);const aPaidAmt=aPaid.reduce((s,l)=>s+(EMIS[l.amount]||0),0);agentBreakdown+=`<tr><td style="font-weight:700">${a.name}</td><td>${aL.length}</td><td style="color:#065f46;font-weight:700">₹${aPaidAmt.toLocaleString('en-IN')}</td><td style="color:#991b1b;font-weight:700">${aDue.length}</td></tr>`;});
+  return`<!DOCTYPE html><html><head><title>NK Daily Report ${dateStr}</title>
+  <style>body{font-family:Arial,sans-serif;padding:20px;max-width:900px;margin:auto;}h1{font-size:20px;margin-bottom:2px;}sub{color:#666;font-size:12px;}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0;}.kpi{background:#f5f5f5;border-radius:6px;padding:10px;text-align:center;}.kpi-v{font-size:18px;font-weight:800;}.kpi-l{font-size:10px;text-transform:uppercase;color:#666;margin-top:2px;}table{width:100%;border-collapse:collapse;margin-top:10px;}th{background:#f5f5f5;padding:7px 9px;text-align:left;font-size:11px;text-transform:uppercase;color:#666;}td{padding:7px 9px;border-bottom:1px solid #eee;font-size:12px;}.sec{margin-top:18px;}.sec-t{font-size:14px;font-weight:800;margin-bottom:6px;padding:5px 8px;border-radius:5px;}.green{background:#dcfce7;color:#065f46;}.red{background:#fee2e2;color:#991b1b;}.blue{background:#dbeafe;color:#1e40af;}</style></head><body>
+  <h1>NEELKUND — Daily Collection Report</h1><sub>${fmtD(dateStr)} ${CU?.role==='agent'?'· Agent: '+CU.name:''}</sub>
+  <div class="kpis"><div class="kpi"><div class="kpi-v" style="color:#065f46">₹${pAmt.toLocaleString('en-IN')}</div><div class="kpi-l">Collected</div></div><div class="kpi"><div class="kpi-v" style="color:#991b1b">₹${dAmt.toLocaleString('en-IN')}</div><div class="kpi-l">Due</div></div><div class="kpi"><div class="kpi-v" style="color:#1e40af">${adv.length}</div><div class="kpi-l">Advance</div></div><div class="kpi"><div class="kpi-v">${loans.length}</div><div class="kpi-l">Total</div></div></div>
+  ${agentBreakdown?`<div class="sec"><div class="sec-t" style="background:#f5f5f5">👥 Agent-wise</div><table><tr><th>Agent</th><th>Customers</th><th>Collected</th><th>Due</th></tr>${agentBreakdown}</table></div>`:''}
+  ${paid.length?`<div class="sec"><div class="sec-t green">✅ Paid (${paid.length})</div><table><tr><th>Name</th><th>ID</th><th>Phone</th><th>Agent</th><th>EMI</th><th>Time</th></tr>${paid.map(l=>{const pl=DB.getAll('payLog').find(p=>p.loanId===l.id&&p.date===dateStr);return`<tr><td>${l.name}</td><td>${l.customerId}</td><td>${l.phone||'—'}</td><td>${LS.col('users').find(u=>u.id===l.agent)?.name||'—'}</td><td>₹${EMIS[l.amount]||0}</td><td>${pl?.time||'—'}</td></tr>`;}).join('')}</table></div>`:''}
+  ${due.length?`<div class="sec"><div class="sec-t red">❌ Not Paid (${due.length})</div><table><tr><th>Name</th><th>ID</th><th>Phone</th><th>Agent</th><th>EMI</th><th>Days Late</th></tr>${due.map(l=>{const late=getLateStatus(l,dateStr);return`<tr><td>${l.name}</td><td>${l.customerId}</td><td>${l.phone||'—'}</td><td>${LS.col('users').find(u=>u.id===l.agent)?.name||'—'}</td><td>₹${EMIS[l.amount]||0}</td><td>${late>0?late+'d':'Today'}</td></tr>`;}).join('')}</table></div>`:''}
+  ${adv.length?`<div class="sec"><div class="sec-t blue">⏩ Advance (${adv.length})</div><table><tr><th>Name</th><th>ID</th><th>Phone</th><th>Adv Days</th></tr>${adv.map(l=>`<tr><td>${l.name}</td><td>${l.customerId}</td><td>${l.phone||'—'}</td><td>+${getAdvanceDays(l)}</td></tr>`).join('')}</table></div>`:''}
+  </body></html>`;
+}
+function printDailyReport(){const w=window.open('','_blank');w.document.write(buildReportHTML(collDate)+'<script>window.print();<\/script>');w.document.close();}
+function downloadDailyReport(){const blob=new Blob([buildReportHTML(collDate)],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`NK_Collection_${collDate}.html`;a.click();}
+
+// ══ TOGGLE PAY ══
+function togglePay(loanId,dateStr,btn,src){
+  const l=DB.get('loans',loanId);if(!l)return;
+  if(CU?.role==='agent'&&l.agent!==CU.id){toast('⛔ Not your customer');return;}
+  const payments={...l.payments||{}},e=EMIS[l.amount]||0;
+  if(payments[dateStr]==='paid'){
+    payments[dateStr]='due';
+    DB.update('loans',loanId,{payments});
+    LS.set('payLog',(LS.get('payLog')||[]).filter(p=>!(p.loanId===loanId&&p.date===dateStr)));
+    updateFund(l.branch||branches[0]?.id,-e,`EMI reversed — ${l.name}`);
+    if(btn){btn.textContent='❌';btn.className='etb et-due';}
+    toast('↩️ Reversed');
+  } else {
+    payments[dateStr]='paid';
+    const pd=Object.values(payments).filter(v=>v==='paid').length,completed=pd>=DAYS;
+    DB.update('loans',loanId,{payments,completed});
+    DB.add('payLog',{loanId,customerId:l.customerId,name:l.name,date:dateStr,time:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),amount:e,agentId:l.agent,by:CU?.id});
+    updateFund(l.branch||branches[0]?.id,e,`EMI — ${l.name} (${l.customerId})`);
+    if(btn){btn.textContent='✅';btn.className='etb et-paid';}
+    toast(completed?`🎉 Complete! — ${l.name}`:`✅ ${INR(e)} — ${l.name}`);
+  }
+  if(src==='coll')updateAgentBrief?.();
+}
+
+function markAllPaid(){
+  let loans=DB.getAll('loans');
+  if(activeBranch!=='all')loans=loans.filter(l=>l.branch===activeBranch);
+  if(CU?.role==='agent')loans=loans.filter(l=>l.agent===CU.id);
+  const ts=collDate;
+  const toMark=loans.filter(l=>{const d=Math.floor((new Date(ts+'T00:00:00')-new Date((l.startDate||today())+'T00:00:00'))/86400000);return d>=0&&d<DAYS&&!l.completed&&l.payments?.[ts]!=='paid'&&getAdvanceDays(l)===0;});
+  let total=0;
+  toMark.forEach(l=>{const payments={...l.payments||{}},e=EMIS[l.amount]||0;payments[ts]='paid';const pd=Object.values(payments).filter(v=>v==='paid').length;DB.update('loans',l.id,{payments,completed:pd>=DAYS});DB.add('payLog',{loanId:l.id,customerId:l.customerId,name:l.name,date:ts,time:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),amount:e,agentId:l.agent,by:CU?.id});total+=e;});
+  if(total>0)updateFund(activeBranch==='all'?branches[0]?.id:activeBranch,total,`Bulk EMI — ${ts}`);
+  toast(`✅ ${toMark.length} marked — ${INR(total)}`);fetchColl();
+}
+
+// ══ ADVANCE ══
+function openAdv(loanId){
+  const l=DB.get('loans',loanId);if(!l||l.completed){toast('Not found');return;}
+  if(CU?.role==='agent'&&l.agent!==CU.id){toast('⛔ Not your customer');return;}
+  advLoanId=loanId;
+  const pd=Object.values(l.payments||{}).filter(v=>v==='paid').length,rem=DAYS-pd;
+  document.getElementById('advInfo').innerHTML=`<strong>${l.name}</strong> · ${l.customerId}<br>Remaining: <strong>${rem} days</strong> · EMI: <strong>${INR(EMIS[l.amount]||0)}</strong><br>Advance: <strong>${getAdvanceDays(l)} days</strong>`;
+  document.getElementById('adv_days').value='';document.getElementById('advPreview').innerHTML='';
+  OM('mAdv');
+}
+function updateAdvPreview(){const days=parseInt(document.getElementById('adv_days').value);const l=DB.get('loans',advLoanId);if(!l)return;if(!days||days<1){document.getElementById('advPreview').innerHTML='';return;}document.getElementById('advPreview').innerHTML=`${days} days = <strong style="color:var(--blue)">${INR(days*(EMIS[l.amount]||0))}</strong>`;}
+function confirmAdv(){
+  const days=parseInt(document.getElementById('adv_days').value);if(!days||days<1){toast('⚠️ Enter days');return;}
+  const l=DB.get('loans',advLoanId);if(!l)return;
+  const payments={...l.payments||{}};const startD=new Date(l.startDate+'T00:00:00'),ts=today();let marked=0;
+  for(let i=0;i<DAYS;i++){const d=new Date(startD.getTime()+i*86400000).toISOString().split('T')[0];if(d>=ts&&payments[d]!=='paid'&&marked<days){payments[d]='paid';marked++;}}
+  const pd=Object.values(payments).filter(v=>v==='paid').length;
+  DB.update('loans',advLoanId,{payments,completed:pd>=DAYS});
+  const e=EMIS[l.amount]||0;
+  updateFund(l.branch||branches[0]?.id,days*e,`Advance ${days}d — ${l.name}`);
+  DB.add('payLog',{loanId:l.id,customerId:l.customerId,name:l.name,date:ts,time:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}),amount:days*e,advance:true,advDays:days,agentId:l.agent,by:CU?.id});
+  CM('mAdv');toast(`⏩ ${days}d advance — ${l.name}`);refreshCurrentPage();
+}
+
+// ══ EARLY CLOSURE ══
+function openClosure(loanId){
+  const l=DB.get('loans',loanId);if(!l||l.completed){toast('Not found');return;}
+  const e=EMIS[l.amount]||0,pd=Object.values(l.payments||{}).filter(v=>v==='paid').length,rem=(DAYS-pd)*e;
+  closureLoanId=loanId;
+  document.getElementById('closureInfo').innerHTML=`<div style="font-weight:800;font-size:14px;margin-bottom:10px">⚡ ${l.name} — ${l.customerId}</div><div class="lpr"><span>Loan</span><strong>${INR(l.amount)}</strong></div><div class="lpr"><span>Paid</span><strong>${pd}/${DAYS} days</strong></div><div class="lpr"><span>Outstanding</span><strong style="color:var(--red);font-size:18px">${INR(rem)}</strong></div>`;
+  document.getElementById('cl_amt').value=rem;document.getElementById('cl_note').value='';
+  OM('mClose');
+}
+function confirmClosure(){
+  const amt=parseFloat(document.getElementById('cl_amt').value);if(!amt||amt<=0){toast('⚠️ Enter amount');return;}
+  const l=DB.get('loans',closureLoanId);if(!l)return;
+  const payments={...l.payments||{}};const startD=new Date(l.startDate+'T00:00:00');
+  for(let i=0;i<DAYS;i++){const d=new Date(startD.getTime()+i*86400000).toISOString().split('T')[0];if(payments[d]!=='paid')payments[d]='paid';}
+  DB.update('loans',closureLoanId,{payments,completed:true,closedEarly:true,closureDate:today(),closureAmt:amt,closureNote:document.getElementById('cl_note').value});
+  updateFund(l.branch||branches[0]?.id,amt,`Early Closure — ${l.name} (${l.customerId})`);
+  CM('mClose');toast(`🎉 Closed! ${INR(amt)} — ${l.name}`);refreshCurrentPage();
+}
+
+// ══ AGENTS PAGE ══
+function renderAgents(){
+  if(!can('agents_view')){document.getElementById('pg-agents').innerHTML=`<div class="empty"><div class="empty-ic">🔒</div><p>Access restricted</p></div>`;return;}
+  const agents=getAgents();
+  document.getElementById('pg-agents').innerHTML=`
+    <div class="ph"><div class="ph-txt"><h2>Collection Agents</h2></div>
+    <div class="ph-acts"><input type="date" id="agentDate" value="${agentDetailDate}" onchange="agentDetailDate=this.value;renderAgents()" style="background:#fff;border:1.5px solid var(--bg3);border-radius:var(--r);padding:7px 11px;font-family:var(--f);font-size:13px;outline:none;"></div></div>
+    ${!agents.length?'<div class="empty"><div class="empty-ic">👥</div><p>No agents yet.</p></div>':''}
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin-bottom:20px">
+      ${agents.map(a=>agentCardHtml(a,agentDetailDate)).join('')}
+    </div>
+    <div class="panel" style="margin-bottom:14px"><div class="pnh"><h3>📊 Total — ${fmtD(agentDetailDate)}</h3></div><div id="totalSummary"></div></div>
+    <div class="panel"><div class="pnh"><h3>❌ Defaulters</h3><span class="bd bd-red" id="defaultCount">0</span></div><div class="tw" id="defaultTbl"></div></div>`;
+  renderTotalSummary(agentDetailDate);renderDefaulters(agentDetailDate);
+}
+
+function agentCardHtml(a,dateStr){
+  let loans=DB.getAll('loans').filter(l=>l.agent===a.id&&!l.completed);
+  if(activeBranch!=='all')loans=loans.filter(l=>l.branch===activeBranch);
+  const onDate=loans.filter(l=>{const d=Math.floor((new Date(dateStr+'T00:00:00')-new Date((l.startDate||today())+'T00:00:00'))/86400000);return d>=0&&d<DAYS;});
+  const paid=onDate.filter(l=>l.payments?.[dateStr]==='paid');
+  const due=onDate.filter(l=>l.payments?.[dateStr]!=='paid'&&getAdvanceDays(l)===0);
+  const adv=onDate.filter(l=>getAdvanceDays(l)>0&&l.payments?.[dateStr]!=='paid');
+  const pAmt=paid.reduce((s,l)=>s+(EMIS[l.amount]||0),0);
+  const dAmt=due.reduce((s,l)=>s+(EMIS[l.amount]||0),0);
+  const pct=onDate.length?Math.round(paid.length/onDate.length*100):0;
+  return`<div class="agent-card" onclick="openAgentDetail('${a.id}','${dateStr}')">
+    <div class="agent-av">${(a.name||'?')[0]}</div>
+    <div class="agent-name">${a.name}</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:8px">${a.empId||'—'}</div>
+    <div class="pbar" style="margin-bottom:5px"><div class="pbar-f" style="width:${pct}%;background:var(--teal)"></div></div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:8px">${pct}% · ${onDate.length} customers</div>
+    <div class="agent-stats">
+      <div class="ast"><div class="ast-v" style="color:var(--green)">${INR(pAmt)}</div><div class="ast-l">Collected</div></div>
+      <div class="ast"><div class="ast-v" style="color:var(--red)">${INR(dAmt)}</div><div class="ast-l">Due</div></div>
+      <div class="ast"><div class="ast-v" style="color:var(--blue)">${adv.length}</div><div class="ast-l">Advance</div></div>
+      <div class="ast"><div class="ast-v">${paid.length}/${onDate.length}</div><div class="ast-l">Paid</div></div>
+    </div>
+  </div>`;
+}
+
+function renderTotalSummary(dateStr){
+  let loans=DB.getAll('loans').filter(l=>!l.completed);
+  if(activeBranch!=='all')loans=loans.filter(l=>l.branch===activeBranch);
+  const onDate=loans.filter(l=>{const d=Math.floor((new Date(dateStr+'T00:00:00')-new Date((l.startDate||today())+'T00:00:00'))/86400000);return d>=0&&d<DAYS;});
+  const paid=onDate.filter(l=>l.payments?.[dateStr]==='paid');
+  const due=onDate.filter(l=>l.payments?.[dateStr]!=='paid'&&getAdvanceDays(l)===0);
+  const adv=onDate.filter(l=>getAdvanceDays(l)>0&&l.payments?.[dateStr]!=='paid');
+  const pAmt=paid.reduce((s,l)=>s+(EMIS[l.amount]||0),0);
+  const dAmt=due.reduce((s,l)=>s+(EMIS[l.amount]||0),0);
+  const el=document.getElementById('totalSummary');
+  if(el)el.innerHTML=`<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;padding:13px 15px"><div class="kpi k-teal"><div class="kl">Customers</div><div class="kv">${onDate.length}</div></div><div class="kpi k-green"><div class="kl">Collected</div><div class="kv">${INR(pAmt)}</div><div class="ks">${paid.length} paid</div></div><div class="kpi k-red"><div class="kl">Due</div><div class="kv">${INR(dAmt)}</div><div class="ks">${due.length}</div></div><div class="kpi k-blue"><div class="kl">Advance</div><div class="kv">${adv.length}</div></div><div class="kpi k-gold"><div class="kl">%</div><div class="kv">${onDate.length?Math.round(paid.length/onDate.length*100):0}%</div></div></div>`;
+}
+
+function renderDefaulters(dateStr){
+  let loans=DB.getAll('loans').filter(l=>!l.completed);
+  if(activeBranch!=='all')loans=loans.filter(l=>l.branch===activeBranch);
+  const def=loans.filter(l=>{const d=Math.floor((new Date(dateStr+'T00:00:00')-new Date((l.startDate||today())+'T00:00:00'))/86400000);return d>=0&&d<DAYS&&l.payments?.[dateStr]!=='paid'&&getAdvanceDays(l)===0;});
+  const cnt=document.getElementById('defaultCount');if(cnt)cnt.textContent=def.length;
+  const tbl=document.getElementById('defaultTbl');if(!tbl)return;
+  if(!def.length){tbl.innerHTML='<div class="empty"><div class="empty-ic">✅</div><p>No defaulters!</p></div>';return;}
+  tbl.innerHTML=`<table><thead><tr><th>Name</th><th>ID</th><th>Phone</th><th>Agent</th><th>Loan</th><th>Late</th><th>Flag</th></tr></thead><tbody>${def.map(l=>{const late=getLateStatus(l,dateStr);return`<tr class="${late>=2?'tr-ov':late===1?'tr-warn':''}${l.flag==='red'?' tr-flag-red':l.flag==='yellow'?' tr-flag-yellow':''}"><td style="font-weight:700">${l.name}</td><td style="font-size:11px;color:var(--teal);font-weight:800">${l.customerId}</td><td style="font-size:12px">${l.phone||'—'}</td><td style="font-size:12px">${LS.col('users').find(u=>u.id===l.agent)?.name||'—'}</td><td style="font-weight:800;color:var(--teal2)">${INR(l.amount)}</td><td>${late===0?'<span class="bd bd-muted">Today</span>':late===1?'<span class="bd bd-gold">⚠️ 1d</span>':`<span class="bd bd-red">🔴 ${late}d</span>`}</td><td>${flagBadge(l.flag,l.flagReason)}</td></tr>`;}).join('')}</tbody></table>`;
+}
+
+function openAgentDetail(agentId,dateStr){
+  const a=LS.col('users').find(u=>u.id===agentId);if(!a)return;
+  let loans=DB.getAll('loans').filter(l=>l.agent===agentId);
+  if(activeBranch!=='all')loans=loans.filter(l=>l.branch===activeBranch);
+  const onDate=loans.filter(l=>{const d=Math.floor((new Date(dateStr+'T00:00:00')-new Date((l.startDate||today())+'T00:00:00'))/86400000);return d>=0&&d<DAYS&&!l.completed;});
+  const paid=onDate.filter(l=>l.payments?.[dateStr]==='paid');
+  const due=onDate.filter(l=>l.payments?.[dateStr]!=='paid'&&getAdvanceDays(l)===0);
+  const adv=onDate.filter(l=>getAdvanceDays(l)>0&&l.payments?.[dateStr]!=='paid');
+  const pAmt=paid.reduce((s,l)=>s+(EMIS[l.amount]||0),0);
+  const dAmt=due.reduce((s,l)=>s+(EMIS[l.amount]||0),0);
+  const advAmt=adv.reduce((s,l)=>s+(EMIS[l.amount]||0),0);
+  window._agentRpt={a,dateStr,paid,due,adv,pAmt,dAmt,advAmt,onDate};
+  document.getElementById('agentDetailHeader').innerHTML=`
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <div style="width:56px;height:56px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;flex-shrink:0">${(a.name||'?')[0]}</div>
+      <div style="flex:1"><div style="font-family:'Playfair Display',serif;font-size:20px;color:#fff">${a.name}</div><div style="font-size:11px;opacity:.5;color:#fff">${a.empId||'—'} · ${fmtD(dateStr)}</div></div>
+      <button onclick="closeAgentDetail()" style="background:rgba(255,255,255,.1);border:none;border-radius:50%;width:32px;height:32px;color:#fff;cursor:pointer;font-size:15px">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px">
+      <div style="background:rgba(255,255,255,.1);border-radius:9px;padding:11px;text-align:center"><div style="font-size:17px;font-weight:800;color:#4ade80">${INR(pAmt)}</div><div style="font-size:10px;opacity:.5;text-transform:uppercase">Collected</div></div>
+      <div style="background:rgba(255,255,255,.1);border-radius:9px;padding:11px;text-align:center"><div style="font-size:17px;font-weight:800;color:#f87171">${INR(dAmt)}</div><div style="font-size:10px;opacity:.5;text-transform:uppercase">Due</div></div>
+      <div style="background:rgba(255,255,255,.1);border-radius:9px;padding:11px;text-align:center"><div style="font-size:17px;font-weight:800;color:#93c5fd">${INR(advAmt)}</div><div style="font-size:10px;opacity:.5;text-transform:uppercase">Advance</div></div>
+      <div style="background:rgba(255,255,255,.1);border-radius:9px;padding:11px;text-align:center"><div style="font-size:17px;font-weight:800;color:#fff">${onDate.length}</div><div style="font-size:10px;opacity:.5;text-transform:uppercase">Customers</div></div>
+    </div>`;
+  let body='';
+  if(paid.length){body+=`<div style="margin-bottom:14px"><div style="font-weight:800;color:var(--green);margin-bottom:7px;font-size:14px">✅ Paid (${paid.length})</div><table><thead><tr><th>Name</th><th>ID</th><th>Phone</th><th>EMI</th><th>Time</th></tr></thead><tbody>${paid.map(l=>{const pl=DB.getAll('payLog').find(p=>p.loanId===l.id&&p.date===dateStr);return`<tr class="tr-done"><td style="font-weight:700">${l.name}</td><td style="font-size:11px;color:var(--teal)">${l.customerId}</td><td style="font-size:12px">${l.phone||'—'}</td><td style="color:var(--green);font-weight:700">${INR(EMIS[l.amount]||0)}</td><td style="font-size:11px;color:var(--muted)">${pl?.time||'—'}</td></tr>`;}).join('')}</tbody></table></div>`;}
+  if(adv.length){body+=`<div style="margin-bottom:14px"><div style="font-weight:800;color:var(--blue);margin-bottom:7px;font-size:14px">⏩ Advance (${adv.length})</div><table><thead><tr><th>Name</th><th>ID</th><th>Phone</th><th>Adv Days</th></tr></thead><tbody>${adv.map(l=>`<tr class="tr-adv"><td style="font-weight:700">${l.name}</td><td style="font-size:11px;color:var(--teal)">${l.customerId}</td><td style="font-size:12px">${l.phone||'—'}</td><td><span class="bd bd-blue">+${getAdvanceDays(l)}d</span></td></tr>`).join('')}</tbody></table></div>`;}
+  if(due.length){body+=`<div><div style="font-weight:800;color:var(--red);margin-bottom:7px;font-size:14px">❌ Not Paid (${due.length})</div><table><thead><tr><th>Name</th><th>ID</th><th>Phone</th><th>EMI</th><th>Late</th></tr></thead><tbody>${due.map(l=>{const late=getLateStatus(l,dateStr);return`<tr class="${late>=2?'tr-ov':late===1?'tr-warn':''}"><td style="font-weight:700">${l.name}</td><td style="font-size:11px;color:var(--teal)">${l.customerId}</td><td style="font-size:12px">${l.phone||'—'}</td><td style="color:var(--red);font-weight:700">${INR(EMIS[l.amount]||0)}</td><td>${late===0?'—':late===1?'<span class="bd bd-gold">⚠️ 1d</span>':`<span class="bd bd-red">🔴 ${late}d</span>`}</td></tr>`;}).join('')}</tbody></table></div>`;}
+  if(!paid.length&&!due.length&&!adv.length)body='<div class="empty"><div class="empty-ic">📋</div><p>No loans on this date</p></div>';
+  document.getElementById('agentDetailBody').innerHTML=body;
+  document.getElementById('agentDetailOv').classList.add('on');
+}
+function closeAgentDetail(){document.getElementById('agentDetailOv').classList.remove('on');}
+function printAgentReport(){if(!window._agentRpt)return;const d=window._agentRpt;const w=window.open('','_blank');w.document.write(buildAgentReportHTML(d)+'<script>window.print();<\/script>');w.document.close();}
+function downloadAgentReport(){if(!window._agentRpt)return;const d=window._agentRpt;const html=buildAgentReportHTML(d);const blob=new Blob([html],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`NK_Agent_${d.a.name}_${d.dateStr}.html`;a.click();}
+function buildAgentReportHTML(d){return`<!DOCTYPE html><html><head><title>${d.a.name} — ${d.dateStr}</title><style>body{font-family:Arial,sans-serif;padding:20px;max-width:800px;margin:auto;}h1{font-size:20px;}p{color:#666;font-size:12px;}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0;}.kpi{background:#f5f5f5;border-radius:6px;padding:10px;text-align:center;}.kpi-v{font-size:18px;font-weight:800;}.kpi-l{font-size:10px;text-transform:uppercase;color:#666;margin-top:2px;}table{width:100%;border-collapse:collapse;margin-top:8px;}th{background:#f5f5f5;padding:7px;text-align:left;font-size:11px;text-transform:uppercase;color:#666;}td{padding:7px;border-bottom:1px solid #eee;font-size:12px;}.s{margin-top:16px;}.st{font-size:14px;font-weight:800;margin-bottom:5px;}.green{color:#065f46;}.red{color:#991b1b;}.blue{color:#1e40af;}</style></head><body><h1>NEELKUND — Agent Report</h1><p>${d.a.name} · ${d.a.empId||'—'} · ${fmtD(d.dateStr)}</p><div class="kpis"><div class="kpi"><div class="kpi-v green">${INR(d.pAmt)}</div><div class="kpi-l">Collected</div></div><div class="kpi"><div class="kpi-v red">${INR(d.dAmt)}</div><div class="kpi-l">Due</div></div><div class="kpi"><div class="kpi-v blue">${INR(d.advAmt)}</div><div class="kpi-l">Advance</div></div><div class="kpi"><div class="kpi-v">${d.onDate.length}</div><div class="kpi-l">Customers</div></div></div>${d.paid.length?`<div class="s"><div class="st green">✅ Paid (${d.paid.length})</div><table><tr><th>Name</th><th>ID</th><th>Phone</th><th>EMI</th><th>Time</th></tr>${d.paid.map(l=>{const pl=DB.getAll('payLog').find(p=>p.loanId===l.id&&p.date===d.dateStr);return`<tr><td>${l.name}</td><td>${l.customerId}</td><td>${l.phone||'—'}</td><td>₹${EMIS[l.amount]||0}</td><td>${pl?.time||'—'}</td></tr>`;}).join('')}</table></div>`:''}${d.due.length?`<div class="s"><div class="st red">❌ Not Paid (${d.due.length})</div><table><tr><th>Name</th><th>ID</th><th>Phone</th><th>EMI</th></tr>${d.due.map(l=>`<tr><td>${l.name}</td><td>${l.customerId}</td><td>${l.phone||'—'}</td><td>₹${EMIS[l.amount]||0}</td></tr>`).join('')}</table></div>`:''}${d.adv.length?`<div class="s"><div class="st blue">⏩ Advance (${d.adv.length})</div><table><tr><th>Name</th><th>ID</th><th>Adv Days</th></tr>${d.adv.map(l=>`<tr><td>${l.name}</td><td>${l.customerId}</td><td>+${getAdvanceDays(l)} days</td></tr>`).join('')}</table></div>`:''}`,{type:'text/html'},'</body></html>'}`;}
+
+// ══ SALARY ══
+function renderSalary(){
+  const canEdit=CU?.role==='admin'||can('salary_edit');
+  const employees=LS.col('users').filter(u=>u.role==='agent'||u.role==='manager');
+  const brs=LS.col('branches');
+  document.getElementById('pg-salary').innerHTML=`
+    <div class="ph"><div class="ph-txt"><h2>💰 Salary</h2></div></div>
+    <div class="panel"><div class="pnh"><h3>Employee Salaries</h3></div>
+    <div class="tw"><table><thead><tr><th>Name</th><th>Role</th><th>Branch</th><th>Join Date</th><th>Salary/Month</th>${canEdit?'<th>Edit</th>':''}</tr></thead>
+    <tbody>${employees.length?employees.map(u=>`<tr><td style="font-weight:700">${u.name}</td><td><span class="bd bd-muted">${u.role.toUpperCase()}</span></td><td>${brs.find(b=>b.id===u.branch)?.name||'—'}</td><td style="font-size:12px">${u.joinDate?fmtD(u.joinDate):'—'}</td><td style="font-weight:800;color:var(--green);font-size:15px">${u.salary?INR(u.salary):'—'}</td>${canEdit?`<td><button class="btn btn-teal btn-xs" onclick="openSalaryEdit('${u.id}','${u.name}',${u.salary||0})">✏️</button></td>`:''}</tr>`).join(''):`<tr><td colspan="${canEdit?6:5}" style="text-align:center;color:var(--muted);padding:20px">No employees</td></tr>`}</tbody></table></div></div>
+    <div class="panel" style="margin-top:14px"><div class="pnh"><h3>📋 Salary History</h3></div>
+    <div class="tw"><table><thead><tr><th>Date</th><th>Employee</th><th>Old</th><th>New</th><th>By</th><th>Note</th></tr></thead>
+    <tbody>${(DB.getAll('salaryLog')||[]).reverse().slice(0,20).map(s=>`<tr><td style="font-size:12px">${fmtD(s.date)}</td><td style="font-weight:700">${s.empName}</td><td style="color:var(--muted)">${INR(s.oldSalary)}</td><td style="font-weight:800;color:var(--teal)">${INR(s.newSalary)}</td><td style="font-size:12px;color:var(--muted)">${s.changedBy}</td><td style="font-size:12px;color:var(--muted)">${s.note||'—'}</td></tr>`).join('')}${!DB.getAll('salaryLog').length?'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:16px">No changes yet</td></tr>':''}</tbody></table></div></div>`;
+}
+function openSalaryEdit(uid,name,sal){_salaryEditId=uid;document.getElementById('sal_name').value=name;document.getElementById('sal_amt').value=sal||'';document.getElementById('sal_from').value=today();document.getElementById('sal_note').value='';OM('mSalary');}
+function saveSalary(){
+  const canEdit=CU?.role==='admin'||can('salary_edit');if(!canEdit){toast('⛔ No permission');return;}
+  const amt=parseFloat(document.getElementById('sal_amt').value);if(!amt||amt<=0){toast('⚠️ Enter salary');return;}
+  const u=LS.col('users').find(x=>x.id===_salaryEditId);if(!u)return;
+  const oldSal=u.salary||0;LS.update('users',_salaryEditId,{salary:amt});
+  DB.add('salaryLog',{empId:_salaryEditId,empName:u.name,oldSalary:oldSal,newSalary:amt,date:document.getElementById('sal_from').value,note:document.getElementById('sal_note').value,changedBy:CU?.name,changedAt:nowTs()});
+  CM('mSalary');toast(`💰 Updated: ${u.name} → ${INR(amt)}/mo`);renderSalary();
+}
+
+// ══ CUSTOMER PROFILE ══
+function openProfile(customerId){
+  const loans=DB.getAll('loans').filter(l=>l.customerId===customerId);
+  if(!loans.length){toast('Not found');return;}
+  const latest=loans.sort((a,b)=>(b.startDate||'').localeCompare(a.startDate||''))[0];
+  const initials=(latest.name||'?')[0].toUpperCase();
+  const agentName=LS.col('users').find(u=>u.id===latest.agent)?.name||'—';
+  const isAgent=CU?.role==='agent';
+  const ovDays=getOverdueDays(latest);
+  const bl=isBlacklisted(customerId);
+  // Build 46-day payment calendar
+  let payCalendar='';
+  if(latest.startDate){
+    const startD=new Date(latest.startDate+'T00:00:00');
+    for(let i=0;i<DAYS;i++){
+      const d=new Date(startD.getTime()+i*86400000).toISOString().split('T')[0];
+      const status=latest.payments?.[d]||'due';
+      const cls=status==='paid'?'pd-paid':'pd-due';
+      payCalendar+=`<div class="pay-dot ${cls}" title="Day ${i+1} · ${fmtD(d)} · ${status.toUpperCase()}">${status==='paid'?'✓':'✗'}</div>`;
+    }
+  }
+  document.getElementById('pcHeader').innerHTML=`
+    ${latest.photo?`<img src="${latest.photo}" class="pc-img">`:`<div class="pc-img-ph">${initials}</div>`}
+    <div class="pc-info" style="flex:1">
+      <h2>${latest.name||'—'}</h2>
+      <p style="font-size:13px;color:rgba(255,255,255,.75);font-weight:600">${customerId}</p>
+      <p>📞 ${latest.phone||'—'} &nbsp;|&nbsp; 📍 ${latest.address||'—'}</p>
+      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+        ${latest.isRepeat?`<span style="background:rgba(22,163,74,.25);color:#86efac;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700">🔄 Cycle ${latest.cycleNo||'?'}</span>`:'<span style="background:rgba(255,153,51,.2);color:#fed7aa;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700">🆕 NEW</span>'}
+        ${latest.closedEarly?'<span style="background:rgba(22,163,74,.25);color:#86efac;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700">⚡ Early Closure</span>':''}
+        ${latest.flag==='red'?`<span style="background:rgba(192,57,43,.4);color:#fca5a5;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700">🔴 Red: ${latest.flagReason||''}</span>`:''}
+        ${latest.flag==='yellow'?`<span style="background:rgba(234,179,8,.3);color:#fde68a;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700">🟡 Yellow: ${latest.flagReason||''}</span>`:''}
+        ${bl.blocked?`<span style="background:rgba(192,57,43,.5);color:#fff;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700">🚫 BLACKLISTED</span>`:''}
+        ${ovDays>=90?`<span style="background:rgba(192,57,43,.5);color:#fff;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700">🔴 ${ovDays}d Overdue</span>`:''}
+        ${latest.location?`<a href="${latest.location}" target="_blank" style="background:rgba(29,78,216,.3);color:#93c5fd;border-radius:20px;padding:2px 9px;font-size:11px;font-weight:700;text-decoration:none">📍 Map</a>`:''}
+      </div>
+    </div>
+    <button onclick="closeProfile()" style="background:rgba(255,255,255,.1);border:none;border-radius:50%;width:34px;height:34px;color:#fff;cursor:pointer;font-size:16px;flex-shrink:0">✕</button>`;
+  // Feature 27: Day-by-day 46-day track
+  const pd46=Object.values(latest.payments||{}).filter(v=>v==='paid').length;
+  const lastPaidDay=pd46>0?pd46:0;
+  document.getElementById('pcBody').innerHTML=`
+    ${bl.blocked?`<div style="background:var(--red2);border:2px solid var(--red);border-radius:var(--r);padding:12px;margin-bottom:14px;font-size:13px;color:var(--red3)">🚫 <strong>BLACKLISTED:</strong> ${bl.reason}</div>`:''}
+    ${ovDays>0?`<div style="background:var(--red2);border:2px solid var(--red);border-radius:var(--r);padding:10px;margin-bottom:12px;font-size:13px;color:var(--red3)">⏰ <strong>${ovDays} days overdue</strong> after 46-day tenure</div>`:''}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:14px">
+      <div class="panel"><div class="pnh"><h3>📋 Details</h3></div><div class="pnb">
+        <div class="sr2"><span class="sr2-l">Phone</span><span style="font-weight:700">${latest.phone||'—'}</span></div>
+        <div class="sr2"><span class="sr2-l">Address</span><span style="font-weight:700;font-size:12px">${latest.address||'—'}</span></div>
+        <div class="sr2"><span class="sr2-l">Agent</span><span style="font-weight:700">${agentName}</span></div>
+        ${!isAgent?`<div class="sr2"><span class="sr2-l">Aadhaar</span><span style="font-weight:700">${latest.aadhaarNum||'—'}</span></div>`:''}
+        ${!isAgent?`<div class="sr2"><span class="sr2-l">PAN</span><span style="font-weight:700">${latest.panNum||'—'}</span></div>`:''}
+        ${latest.guarantor?`<div class="sr2"><span class="sr2-l">Guarantor</span><span style="font-weight:700">${latest.guarantor}</span></div>`:''}
+        <div class="sr2"><span class="sr2-l">Paid Days</span><span style="font-weight:700;color:var(--teal)">${lastPaidDay}/${DAYS}</span></div>
+        ${ovDays>=90?`<div style="background:var(--red2);border-radius:8px;padding:7px 10px;margin-top:5px;font-size:12px;color:var(--red3)">🚫 90+ days overdue. Manager approval needed for new loan.</div>`:''}
+      </div></div>
+      <div class="panel"><div class="pnh"><h3>📅 46-Day Payment Track</h3></div><div class="pnb">
+        <div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:10px">${payCalendar}</div>
+        <div style="font-size:11px;color:var(--muted)"><span style="background:#dcfce7;padding:2px 6px;border-radius:4px">✓ Paid</span> <span style="background:#fee2e2;padding:2px 6px;border-radius:4px">✗ Missed</span></div>
+        ${getAdvanceDays(latest)>0?`<div style="padding:8px;background:var(--blue2);border-radius:8px;font-size:12px;color:var(--blue);font-weight:700;margin-top:8px">⏩ ${getAdvanceDays(latest)} days advance covered</div>`:''}
+      </div></div>
+    </div>
+    ${!isAgent?`<div class="panel"><div class="pnh"><h3>💳 Loan History (${loans.length})</h3></div><div class="tw"><table>
+      <thead><tr><th>Amount</th><th>Cycle</th><th>Start</th><th>Paid Days</th><th>Outstanding</th><th>Status</th><th>Overdue</th></tr></thead>
+      <tbody>${loans.sort((a,b)=>(b.startDate||'').localeCompare(a.startDate||'')).map(l=>{
+        const pd=Object.values(l.payments||{}).filter(v=>v==='paid').length,e=EMIS[l.amount]||0;
+        const rem=(DAYS-pd)*e,isC=l.completed||pd>=DAYS,ov=getOverdueDays(l);
+        return`<tr class="${isC?(l.closedEarly?'tr-early':'tr-done'):ov>=90?'tr-ov':''}">
+          <td style="font-weight:800;color:var(--teal2)">${INR(l.amount)}</td>
+          <td><span class="bd bd-blue">C${l.cycleNo||1}</span></td>
+          <td style="font-size:11px">${fmtD(l.startDate)}</td>
+          <td>${pd}/${DAYS}</td>
+          <td style="font-weight:800;color:${isC?'var(--green)':'var(--red)'}">${isC?'₹0':INR(rem)}</td>
+          <td>${isC?(l.closedEarly?'<span class="bd bd-green">⚡ Early</span>':'<span class="bd bd-green">✅ Done</span>'):'<span class="bd bd-blue">Active</span>'}</td>
+          <td>${ov>0?`<span class="bd bd-red">🔴 ${ov}d</span>`:'<span class="bd bd-green">OK</span>'}</td>
+        </tr>`;
+      }).join('')}</tbody></table></div></div>`:''}
+    ${(CU?.role==='manager'||CU?.role==='admin')?`<div style="margin-top:12px;padding:11px;background:var(--bg);border-radius:var(--r);display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span style="font-size:13px;font-weight:700">Flag this customer:</span><button class="btn btn-red btn-sm" onclick="openFlagModal('${latest.id}','${customerId}')">🚩 Flag</button><span style="font-size:12px;color:var(--muted)">${latest.flagReason?`Current: ${latest.flagReason}`:''}</span></div>`:''}`;
+  document.getElementById('profileOv').classList.add('on');
+}
+function closeProfile(){document.getElementById('profileOv').classList.remove('on');}
+
+// ══ LOAN MODAL ══
+function openLoanModal(){
+  if(!can('loan_add')){toast('⛔ No permission');return;}
+  if(!branches.length){toast('⚠️ Add branch first');OM('mBranch');return;}
+  ['nl_cid','nl_name','nl_phone','nl_addr','nl_guar','nl_aadh','nl_pan','nl_loc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('nl_amt').value='';document.getElementById('nl_date').value=today();
+  document.getElementById('lprevWrap').style.display='none';document.getElementById('custResult').innerHTML='';
+  document.getElementById('gpsStatus').innerHTML='';document.getElementById('kycWarn').style.display='none';
+  document.getElementById('blacklistWarnBox').style.display='none';_approvalLoanBlocked=false;
+  const gpsBtn=document.getElementById('gpsBtn');if(gpsBtn){gpsBtn.textContent='📍 Capture';gpsBtn.disabled=false;}
+  ['pAadh','pPan','pPhoto'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  fillBranchSelects();fillAgentSelects();
+  if(activeBranch&&activeBranch!=='all'){const el=document.getElementById('nl_branch');if(el)el.value=activeBranch;}
+  if(CU?.role==='agent'){const el=document.getElementById('nl_agent_sel');if(el)el.value=CU.id;}
+  genCustId();OM('mLoan');
+}
+function genCustId(){const loans=DB.getAll('loans'),ids=loans.map(l=>l.customerId).filter(Boolean);let n=loans.length+1,cid='NK-'+String(n).padStart(4,'0');while(ids.includes(cid)){n++;cid='NK-'+String(n).padStart(4,'0');}document.getElementById('nl_cid').value=cid;document.getElementById('custResult').innerHTML=`<span style="color:var(--teal);font-size:11px">⚡ ${cid}</span>`;}
+function lookupCust(){const cid=document.getElementById('nl_cid').value.trim();if(!cid){toast('Enter ID');return;}const prev=DB.getAll('loans').filter(l=>l.customerId===cid);if(!prev.length){document.getElementById('custResult').innerHTML=`<span style="color:var(--muted);font-size:11px">New customer</span>`;return;}const last=prev[prev.length-1];['nl_name','nl_phone','nl_addr'].forEach(id=>{const map={nl_name:'name',nl_phone:'phone',nl_addr:'address'};const el=document.getElementById(id);if(el)el.value=last[map[id]]||'';});const bl=isBlacklisted(cid);document.getElementById('custResult').innerHTML=`<span style="color:${bl.blocked?'var(--red)':'var(--green)'};font-size:11px;font-weight:700">${bl.blocked?`🚫 BLACKLISTED: ${bl.reason}`:`✅ ${last.name} — ${prev.length} loan(s). Cycle ${prev.length+1}`}</span>`;if(bl.blocked){_approvalCustId=cid;_approvalLoanBlocked=true;const bx=document.getElementById('blacklistWarnBox'),bm=document.getElementById('blacklistWarnMsg');bx.style.display='block';bm.textContent=`${last.name} (${cid}) — ${bl.reason}`;}}
+function liveCustSearch(){const q=document.getElementById('nl_cid').value.trim();if(q.length<2)return;const found=DB.getAll('loans').filter(l=>(l.customerId||'').toLowerCase().includes(q.toLowerCase())||(l.name||'').toLowerCase().includes(q.toLowerCase()));if(found.length)document.getElementById('custResult').innerHTML=found.slice(0,3).map(l=>`<div style="font-size:11px;color:var(--muted)">${l.customerId} — ${l.name}</div>`).join('');}
+function updateLPrev(){const amt=parseInt(document.getElementById('nl_amt').value);const w=document.getElementById('lprevWrap');if(!amt||!EMIS[amt]){w.style.display='none';return;}const e=EMIS[amt],tot=e*DAYS;document.getElementById('lprev').innerHTML=`<div class="lpr"><span>Principal</span><strong>${INR(amt)}</strong></div><div class="lpr"><span>EMI/day</span><strong style="color:var(--teal)">${INR(e)}</strong></div><div class="lpr"><span>Tenure</span><strong>${DAYS} days</strong></div><div class="lpr"><span>Total</span><strong>${INR(tot)}</strong></div><div class="lpr"><span>Interest</span><strong style="color:var(--green)">${INR(tot-amt)}</strong></div>`;w.style.display='block';}
+async function saveLoan(){
+  if(_approvalLoanBlocked){toast('⛔ Manager approval required first');return;}
+  const name=document.getElementById('nl_name').value.trim(),amt=parseInt(document.getElementById('nl_amt').value),date=document.getElementById('nl_date').value,cid=document.getElementById('nl_cid').value.trim(),brId=document.getElementById('nl_branch').value,agentId=document.getElementById('nl_agent_sel').value;
+  if(!name){toast('⚠️ Name required');return;}if(!amt||!EMIS[amt]){toast('⚠️ Select amount');return;}if(!date){toast('⚠️ Select date');return;}if(!cid){toast('⚠️ ID required');return;}if(!brId){toast('⚠️ Select branch');return;}
+  if(getBF(brId)<amt){toast(`⛔ Insufficient fund`);return;}
+  const btn=document.getElementById('saveLoanBtn');btn.textContent='Saving…';btn.disabled=true;
+  try{
+    const prev=DB.getAll('loans').filter(l=>l.customerId===cid&&l.completed);
+    const isRepeat=prev.length>0,cycleNo=prev.length+1;
+    const [photoUrl,aadhUrl,panUrl]=await Promise.all([saveImg('nl_photo',`photo_${cid}`),saveImg('nl_aadhImg',`aadh_${cid}`),saveImg('nl_panImg',`pan_${cid}`)]);
+    DB.add('loans',{customerId:cid,name,amount:amt,phone:document.getElementById('nl_phone').value,address:document.getElementById('nl_addr').value,agent:agentId,branch:brId,guarantor:document.getElementById('nl_guar').value,aadhaarNum:document.getElementById('nl_aadh').value,panNum:(document.getElementById('nl_pan').value||'').toUpperCase(),location:document.getElementById('nl_loc').value,photo:photoUrl,aadhaarImg:aadhUrl,panImg:panUrl,startDate:date,payments:{},completed:false,isRepeat,cycleNo,createdBy:CU?.id,createdAt:nowTs()});
+    updateFund(brId,-amt,`Loan — ${name} (${cid})`);
+    CM('mLoan');toast(`✅ ${INR(amt)} issued to ${name}`);refreshCurrentPage();
+  }catch(err){toast('❌ '+err.message);}
+  finally{btn.textContent='✅ Issue Loan';btn.disabled=false;}
+}
+function delLoan(id){if(!can('loan_delete')){toast('⛔ No permission');return;}if(!confirm('Delete?'))return;const l=DB.get('loans',id);if(l&&!l.completed)updateFund(l.branch||branches[0]?.id,l.amount,`Cancelled — ${l.name}`);DB.delete('loans',id);toast('🗑️ Deleted');fetchLoans();}
+function saveCorrection(){
+  const idVal=document.getElementById('cor_id').value.trim(),dateVal=document.getElementById('cor_date').value,status=document.getElementById('cor_st').value,reason=document.getElementById('cor_reason').value.trim();
+  if(!idVal||!dateVal||!reason){toast('⚠️ Fill all fields');return;}
+  const loan=DB.getAll('loans').find(l=>l.id===idVal||l.customerId===idVal);if(!loan){toast('⚠️ Not found');return;}
+  if(CU?.role==='agent'&&loan.agent!==CU.id){toast('⛔ Not your customer');return;}
+  const payments={...loan.payments||{}},e=EMIS[loan.amount]||0,wasPaid=payments[dateVal]==='paid';
+  payments[dateVal]=status;const pd=Object.values(payments).filter(v=>v==='paid').length;
+  DB.update('loans',loan.id,{payments,completed:pd>=DAYS});
+  if(status==='paid'&&!wasPaid)updateFund(loan.branch||branches[0]?.id,e,`Correction PAID — ${loan.name}: ${reason}`);
+  if(status==='due'&&wasPaid)updateFund(loan.branch||branches[0]?.id,-e,`Correction REV — ${loan.name}: ${reason}`);
+  DB.add('corrections',{loanId:loan.id,customerId:loan.customerId,name:loan.name,date:dateVal,from:wasPaid?'paid':'due',to:status,reason,by:CU?.id,byName:CU?.name,ts:nowTs()});
+  CM('mCorr');toast(`✅ Corrected for ${loan.name}`);
+}
+
+// ══ EXPENSES ══
+function renderExp(){
+  if(!can('expense_view')){document.getElementById('pg-exp').innerHTML=`<div class="empty"><div class="empty-ic">🔒</div><p>Access restricted</p></div>`;return;}
+  let exps=DB.getAll('expenses');
+  if(activeBranch!=='all')exps=exps.filter(e=>!e.branch||e.branch===activeBranch);
+  exps.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const thisM=today().slice(0,7);
+  const cats=['All','Salary','Incentive','Office Rent','Travel','Stationery','Other'];
+  const selCat=window._expCat||'All';
+  const filtered=selCat==='All'?exps:exps.filter(e=>e.cat===selCat);
+  const mTotal=filtered.filter(e=>(e.date||'').startsWith(thisM)).reduce((s,e)=>s+e.amount,0);
+  const catIco={'Salary':'👤','Incentive':'🏆','Office Rent':'🏢','Travel':'🚗','Stationery':'📎','Other':'📌'};
+  const byCat={};cats.slice(1).forEach(c=>{byCat[c]=exps.filter(e=>e.cat===c&&(e.date||'').startsWith(thisM)).reduce((s,e)=>s+e.amount,0);});
+  document.getElementById('pg-exp').innerHTML=`
+    <div class="ph"><div class="ph-txt"><h2>Expenses</h2></div>${can('expense_add')?`<div class="ph-acts"><button class="btn btn-teal" onclick="openExpModal()">+ Add</button></div>`:''}</div>
+    <div class="kpi-row">
+      <div class="kpi k-red"><div class="kl">This Month (${selCat})</div><div class="kv">${INR(mTotal)}</div></div>
+      <div class="kpi k-purple"><div class="kl">Incentive</div><div class="kv">${INR(byCat['Incentive']||0)}</div></div>
+      <div class="kpi k-gold"><div class="kl">Salary</div><div class="kv">${INR(byCat['Salary']||0)}</div></div>
+      <div class="kpi k-red"><div class="kl">Total All</div><div class="kv">${INR(exps.reduce((s,e)=>s+e.amount,0))}</div></div>
+    </div>
+    <div class="tab-bar">${cats.map(c=>`<button class="tab-btn ${selCat===c?'on':''}" onclick="window._expCat='${c}';renderExp()">${catIco[c]||'📋'} ${c}</button>`).join('')}</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${filtered.length?filtered.map(e=>`<div style="display:flex;align-items:center;gap:11px;padding:11px 13px;background:var(--white);border:1px solid var(--bg3);border-radius:var(--r2);box-shadow:var(--shadow)${e.cat==='Incentive'?';border-left:3px solid var(--purple)':''}"><div style="width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--bg2);flex-shrink:0">${catIco[e.cat]||'📌'}</div><div style="flex:1"><div style="font-weight:700">${e.desc}</div><div style="font-size:11px;color:var(--muted)">${fmtD(e.date)}${e.to?' · '+e.to:''} · <span class="bd bd-muted" style="font-size:9px">${e.cat}</span></div></div><div style="font-size:15px;font-weight:800;color:${e.cat==='Incentive'?'var(--purple)':'var(--red)'}">${INR(e.amount)}</div>${can('expense_add')?`<button class="btn btn-red btn-xs" onclick="delExp('${e.id}',${e.amount},'${e.desc}','${e.branch||''}')">🗑️</button>`:''}</div>`).join(''):'<div class="empty"><div class="empty-ic">💸</div><p>No expenses in this category</p></div>'}
+    </div>`;
+}
+function openExpModal(){['ex_desc','ex_to','ex_note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('ex_amt').value='';document.getElementById('ex_date').value=today();OM('mExp');}
+function saveExp(){
+  const desc=document.getElementById('ex_desc').value.trim(),amt=parseFloat(document.getElementById('ex_amt').value);
+  if(!desc){toast('⚠️ Description required');return;}if(!amt||amt<=0){toast('⚠️ Enter amount');return;}
+  const brId=activeBranch==='all'?branches[0]?.id:activeBranch;
+  DB.add('expenses',{desc,amount:amt,cat:document.getElementById('ex_cat').value,date:document.getElementById('ex_date').value,to:document.getElementById('ex_to').value,note:document.getElementById('ex_note').value,branch:brId,by:CU?.id,byName:CU?.name,createdAt:nowTs()});
+  updateFund(brId,-amt,`Expense — ${desc}`);CM('mExp');toast(`💸 ${INR(amt)}`);renderExp();
+}
+function delExp(id,amt,desc,brId){if(!confirm('Delete?'))return;DB.delete('expenses',id);updateFund(brId||branches[0]?.id,amt,`Exp reversed — ${desc}`);toast('🗑️');renderExp();}
+
+// ══ FUND ══
+function renderFundPg(){
+  if(!can('fund_view')){document.getElementById('pg-fund').innerHTML=`<div class="empty"><div class="empty-ic">🔒</div><p>Access restricted</p></div>`;return;}
+  if(!branches.length){document.getElementById('pg-fund').innerHTML=noBranchHtml();return;}
+  const bf=LS.get('branchFunds')||{};const total=Object.values(bf).reduce((s,v)=>s+(v||0),0);
+  let logs=DB.getAll('fundLog');if(activeBranch!=='all')logs=logs.filter(l=>l.branch===activeBranch);
+  logs.sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  const investments=logs.filter(l=>l.amount>0&&l.investor);const byInv={};investments.forEach(l=>{if(!byInv[l.investor])byInv[l.investor]=0;byInv[l.investor]+=l.amount;});const invTotal=Object.values(byInv).reduce((s,v)=>s+v,0);
+  document.getElementById('pg-fund').innerHTML=`
+    <div class="ph"><div class="ph-txt"><h2>Fund Ledger</h2></div><div class="ph-acts">${can('fund_add')?`<button class="btn btn-teal" onclick="openFundModal()">+ Capital</button>`:''} ${CU?.role==='admin'?`<button class="btn btn-ghost" onclick="openTransferModal()">🔄</button>`:''}</div></div>
+    <div class="kpi-row">${branches.map(b=>`<div class="kpi k-teal"><div class="ki">🏢</div><div class="kl">${b.name}</div><div class="kv">${INR(bf[b.id]||0)}</div></div>`).join('')}<div class="kpi k-gold"><div class="ki">🌐</div><div class="kl">Total</div><div class="kv">${INR(total)}</div></div></div>
+    ${Object.keys(byInv).length?`<div class="panel" style="margin-bottom:13px"><div class="pnh"><h3>📈 By Investor</h3></div><div class="pnb">${Object.entries(byInv).map(([name,amt])=>{const pct=invTotal?Math.round(amt/invTotal*100):0;return`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span style="font-weight:700">${name}</span><span style="font-weight:800;color:var(--teal)">${INR(amt)} (${pct}%)</span></div><div class="pbar"><div class="pbar-f" style="width:${pct}%;background:var(--teal)"></div></div></div>`;}).join('')}</div></div>`:''}
+    <div class="panel"><div class="pnh"><h3>📒 Fund Log</h3></div>
+    <div style="padding:10px 13px;display:flex;flex-direction:column;gap:4px;max-height:500px;overflow-y:auto">${logs.slice(0,300).map(l=>`<div style="display:flex;align-items:center;gap:7px;padding:8px 10px;background:var(--bg);border-radius:9px;border:1px solid var(--bg3)"><div style="width:7px;height:7px;border-radius:50%;background:${l.amount>=0?'var(--green)':'var(--red)'};flex-shrink:0"></div><div style="flex:1;font-size:12px">${l.desc||'—'}${l.investor?` <span style="color:var(--muted);font-size:10px">(${l.investor})</span>`:''}</div><div style="font-size:10px;color:var(--muted)">${branches.find(b=>b.id===l.branch)?.name||'—'}</div><div style="font-size:10px;color:var(--muted)">${fmtD(l.date)}</div><div style="font-size:12px;font-weight:800;color:${l.amount>=0?'var(--green)':'var(--red)'};white-space:nowrap">${l.amount>=0?'+':''}${INR(Math.abs(l.amount))}</div></div>`).join('')}${!logs.length?'<div class="empty"><p>No transactions</p></div>':''}</div></div>`;
+}
+function openFundModal(){['fa_amt','fa_investor','fa_note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('fa_date').value=today();fillBranchSelects();if(activeBranch&&activeBranch!=='all'){const el=document.getElementById('fa_branch');if(el)el.value=activeBranch;}OM('mFund');}
+function saveFundAdd(){const amt=parseFloat(document.getElementById('fa_amt').value),brId=document.getElementById('fa_branch').value,investor=document.getElementById('fa_investor').value.trim();if(!amt||amt<=0){toast('⚠️ Amount');return;}if(!brId){toast('⚠️ Branch');return;}if(!investor){toast('⚠️ Investor');return;}updateFund(brId,amt,`Capital — ${investor}`,investor);CM('mFund');toast(`🏦 ${INR(amt)} added!`);renderFundPg();}
+function openTransferModal(){fillBranchSelects();document.getElementById('tr_amt').value='';document.getElementById('tr_note').value='';updateTransferInfo();OM('mTransfer');}
+function updateTransferInfo(){const from=document.getElementById('tr_from')?.value;const el=document.getElementById('transferInfo');if(el&&from)el.innerHTML=`Available in <strong>${branches.find(b=>b.id===from)?.name||from}</strong>: <strong style="color:var(--teal)">${INR(getBF(from))}</strong>`;}
+function doTransfer(){if(CU?.role!=='admin'){toast('⛔ Admin only');return;}const from=document.getElementById('tr_from').value,to=document.getElementById('tr_to').value,amt=parseFloat(document.getElementById('tr_amt').value),note=document.getElementById('tr_note').value;if(!amt||amt<=0){toast('⚠️ Amount');return;}if(from===to){toast('⚠️ Same branch');return;}if(getBF(from)<amt){toast(`⛔ Has ${INR(getBF(from))}`);return;}const fn=branches.find(b=>b.id===from)?.name||from,tn=branches.find(b=>b.id===to)?.name||to;setBF(from,getBF(from)-amt);setBF(to,getBF(to)+amt);DB.add('fundLog',{amount:-amt,balance:getBF(from),desc:`Transfer → ${tn}${note?' ('+note+')':''}`,branch:from,date:today(),ts:nowTs(),by:CU?.id});DB.add('fundLog',{amount:amt,balance:getBF(to),desc:`Transfer ← ${fn}${note?' ('+note+')':''}`,branch:to,date:today(),ts:nowTs(),by:CU?.id});refreshTopFund();CM('mTransfer');toast(`🔄 ${INR(amt)}: ${fn} → ${tn}`);renderFundPg();}
+
+// ══ FEATURE 32: CUSTOMERS PAGE ══
+function renderCustomers(){
+  if(!can('customers_view')){document.getElementById('pg-customers').innerHTML=`<div class="empty"><div class="empty-ic">🔒</div><p>Access restricted</p></div>`;return;}
+  const allLoans=DB.getAll('loans');
+  // Build unique customer map
+  const custMap={};
+  allLoans.forEach(l=>{
+    if(!custMap[l.customerId]||l.startDate>custMap[l.customerId].startDate)custMap[l.customerId]=l;
+  });
+  let custs=Object.values(custMap);
+  if(activeBranch!=='all')custs=custs.filter(c=>c.branch===activeBranch);
+  const q=(window._custQ||'').toLowerCase();
+  if(q)custs=custs.filter(c=>(c.customerId||'').toLowerCase().includes(q)||(c.name||'').toLowerCase().includes(q)||(c.phone||'').includes(q));
+  const flt=window._custFlt||'All';
+  if(flt==='Red Flag')custs=custs.filter(c=>c.flag==='red');
+  else if(flt==='Yellow')custs=custs.filter(c=>c.flag==='yellow');
+  else if(flt==='Good')custs=custs.filter(c=>c.flag==='green'||(!c.flag&&!getOverdueDays(c)));
+  else if(flt==='Blacklisted')custs=custs.filter(c=>isBlacklisted(c.customerId).blocked);
+  else if(flt==='Active')custs=custs.filter(c=>!c.completed);
+  else if(flt==='Done')custs=custs.filter(c=>c.completed);
+  document.getElementById('pg-customers').innerHTML=`
+    <div class="ph"><div class="ph-txt"><h2>👤 All Customers</h2><p>${custs.length} customers</p></div>
+    <div class="ph-acts">
+      <button class="btn btn-teal" onclick="downloadCustomerList()">⬇️ Download CSV</button>
+    </div></div>
+    <div class="sr">
+      <div class="sb"><span class="si">🔍</span><input type="text" id="custSrch" placeholder="Name, ID, phone..." value="${window._custQ||''}" oninput="window._custQ=this.value;renderCustomers()"></div>
+      <div class="chips">${['All','Active','Done','Red Flag','Yellow','Good','Blacklisted'].map(f=>`<div class="ch ${flt===f?'on':''}" onclick="window._custFlt='${f}';renderCustomers()">${f}</div>`).join('')}</div>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi k-teal"><div class="kl">Total</div><div class="kv">${Object.keys(custMap).length}</div></div>
+      <div class="kpi k-green"><div class="kl">🟢 Good</div><div class="kv">${Object.values(custMap).filter(c=>!c.flag&&!getOverdueDays(c)).length}</div></div>
+      <div class="kpi k-gold"><div class="kl">🟡 Yellow</div><div class="kv">${Object.values(custMap).filter(c=>c.flag==='yellow').length}</div></div>
+      <div class="kpi k-red"><div class="kl">🔴 Red / Blocked</div><div class="kv">${Object.values(custMap).filter(c=>c.flag==='red'||isBlacklisted(c.customerId).blocked).length}</div></div>
+    </div>
+    <div class="panel"><div class="tw">
+      <table><thead><tr><th>Photo</th><th>ID</th><th>Name</th><th>Phone</th><th>Last Loan</th><th>Cycles</th><th>Status</th><th>Risk</th><th>Details</th></tr></thead>
+      <tbody>${custs.length?custs.map(c=>{
+        const allC=allLoans.filter(l=>l.customerId===c.customerId);
+        const cycles=allC.length;
+        const lastAmt=c.amount;
+        const ovDays=getOverdueDays(c);
+        const bl=isBlacklisted(c.customerId);
+        // Determine risk color
+        let risk,riskBg;
+        if(bl.blocked||ovDays>=90){risk='🔴 Blacklisted';riskBg='var(--red2)';}
+        else if(c.flag==='red'){risk='🔴 Red Flag';riskBg='var(--red2)';}
+        else if(c.flag==='yellow'||ovDays>0){risk='🟡 Caution';riskBg:'#fefce8';}
+        else if(c.completed||c.flag==='green'){risk='🟢 Good';riskBg='var(--green2)';}
+        else{risk='🔵 Active';riskBg:'var(--blue2)';}
+        const av=c.photo?`<img src="${c.photo}" class="cust-av">`:`<div class="cust-av-ph">${(c.name||'?')[0]}</div>`;
+        return`<tr style="background:${bl.blocked||ovDays>=90?'#fef2f2':c.flag==='yellow'?'#fefce8':c.completed?'#f0fdf4':''}">
+          <td>${av}</td>
+          <td><span style="font-weight:800;font-size:11px;color:var(--teal);cursor:pointer;text-decoration:underline" onclick="openProfile('${c.customerId}')">${c.customerId}</span></td>
+          <td>
+            <div style="font-weight:700">${c.name}</div>
+            ${c.flagReason?`<div style="font-size:10px;color:var(--muted)">${c.flagReason}</div>`:''}
+          </td>
+          <td style="font-size:12px">${c.phone||'—'}</td>
+          <td style="font-weight:800;color:var(--teal2)">${INR(lastAmt)}</td>
+          <td><span class="bd bd-blue">${cycles}x</span></td>
+          <td>${c.completed?'<span class="bd bd-green">✅ Done</span>':'<span class="bd bd-blue">Active</span>'}</td>
+          <td><span style="font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:${bl.blocked||c.flag==='red'?'var(--red2)':c.flag==='yellow'?'var(--gold2)':'var(--green2)'};color:${bl.blocked||c.flag==='red'?'var(--red3)':c.flag==='yellow'?'var(--gold3)':'#065f46'}">${risk}</span></td>
+          <td><button class="btn btn-ghost btn-xs" onclick="openProfile('${c.customerId}')">👁️</button></td>
+        </tr>`;
+      }).join(''):'<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:24px">No customers found</td></tr>'}</tbody></table>
+    </div></div>`;
+}
+
+// Feature 32: Download customer CSV
+function downloadCustomerList(){
+  const allLoans=DB.getAll('loans');
+  const custMap={};
+  allLoans.forEach(l=>{if(!custMap[l.customerId]||l.startDate>custMap[l.customerId].startDate)custMap[l.customerId]=l;});
+  let custs=Object.values(custMap);
+  if(activeBranch!=='all')custs=custs.filter(c=>c.branch===activeBranch);
+  const rows=[['ID','Name','Phone','Last Loan Amount','Cycles','Status','Risk Flag','Flag Reason','Overdue Days']];
+  custs.forEach(c=>{
+    const allC=allLoans.filter(l=>l.customerId===c.customerId).length;
+    const ovDays=getOverdueDays(c);
+    const bl=isBlacklisted(c.customerId);
+    const risk=bl.blocked||ovDays>=90?'BLACKLISTED':c.flag==='red'?'RED':c.flag==='yellow'?'YELLOW':c.flag==='green'?'GREEN':'OK';
+    rows.push([c.customerId,c.name,c.phone||'',c.amount,allC,c.completed?'Done':'Active',risk,c.flagReason||'',ovDays]);
+  });
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`NK_Customers_${today()}.csv`;a.click();toast('⬇️ Customer list downloaded!');
+}
+
+// ══ FEATURE 29: ACCESS CONTROL PAGE ══
+function renderAccess(){
+  if(CU?.role!=='admin'){document.getElementById('pg-access').innerHTML=`<div class="empty"><div class="empty-ic">🔒</div><p>Admin only</p></div>`;return;}
+  const acc=LS.get('accessSettings')||{};
+  const now=new Date();
+  document.getElementById('pg-access').innerHTML=`
+    <div class="ph"><div class="ph-txt"><h2>⏰ Access Control</h2><p>System hours & holiday management for Managers & Agents</p></div>
+    <div class="ph-acts"><button class="btn btn-teal" onclick="saveAccessSettings()">💾 Save Settings</button></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+      <div class="panel"><div class="pnh"><h3>🕐 Working Hours</h3></div><div class="pnb">
+        <div style="background:var(--bg);border-radius:var(--r);padding:12px;margin-bottom:12px;font-size:13px;color:var(--muted)">Managers & Agents cannot log in outside these hours. Admin & Partners have no restriction.</div>
+        <div class="fg" style="margin-bottom:10px">
+          <label>Enable Restriction</label>
+          <label class="tog" style="margin-top:4px"><input type="checkbox" id="acc_enabled" ${acc.enabled?'checked':''}><span class="ts"></span></label>
+        </div>
+        <div class="fg2">
+          <div class="fg"><label>Access Start (Hour)</label><input type="number" id="acc_startH" min="0" max="23" value="${acc.startHour||8}" style="background:var(--bg);border:1.5px solid var(--bg3);border-radius:var(--r);padding:8px 11px;font-size:13px;outline:none"></div>
+          <div class="fg"><label>Start Minute</label><input type="number" id="acc_startM" min="0" max="59" value="${acc.startMin||0}" style="background:var(--bg);border:1.5px solid var(--bg3);border-radius:var(--r);padding:8px 11px;font-size:13px;outline:none"></div>
+          <div class="fg"><label>Access End (Hour)</label><input type="number" id="acc_endH" min="0" max="23" value="${acc.endHour||22}" style="background:var(--bg);border:1.5px solid var(--bg3);border-radius:var(--r);padding:8px 11px;font-size:13px;outline:none"></div>
+          <div class="fg"><label>End Minute</label><input type="number" id="acc_endM" min="0" max="59" value="${acc.endMin||0}" style="background:var(--bg);border:1.5px solid var(--bg3);border-radius:var(--r);padding:8px 11px;font-size:13px;outline:none"></div>
+        </div>
+        <div style="background:var(--teal3);border-radius:8px;padding:9px 11px;font-size:12px;color:var(--teal2);margin-top:10px">
+          <strong>Current setting:</strong> ${String(acc.startHour||8).padStart(2,'0')}:${String(acc.startMin||0).padStart(2,'0')} – ${String(acc.endHour||22).padStart(2,'0')}:${String(acc.endMin||0).padStart(2,'0')}<br>
+          <strong>Current time:</strong> ${now.toLocaleTimeString('en-IN')}
+        </div>
+      </div></div>
+      <div class="panel"><div class="pnh"><h3>🎯 Temporary Override</h3></div><div class="pnb">
+        <div style="font-size:13px;color:var(--muted);margin-bottom:10px">Grant early access for specific sessions. Override lasts 8 hours after activation.</div>
+        <div style="background:${acc.overrideUntil&&Date.now()<acc.overrideUntil?'var(--green2)':'var(--bg)'};border-radius:var(--r);padding:10px;font-size:13px;font-weight:700;color:${acc.overrideUntil&&Date.now()<acc.overrideUntil?'var(--green)':'var(--muted)'};margin-bottom:10px">
+          ${acc.overrideUntil&&Date.now()<acc.overrideUntil?`✅ Override active until ${new Date(acc.overrideUntil).toLocaleTimeString('en-IN')}`:'🔒 No active override'}
+        </div>
+        <button class="btn btn-teal" onclick="activateOverride()">⚡ Activate 8hr Override</button>
+        ${acc.overrideUntil&&Date.now()<acc.overrideUntil?`<button class="btn btn-red btn-sm" style="margin-left:8px" onclick="cancelOverride()">✕ Cancel</button>`:''}
+      </div></div>
+    </div>
+    <div class="panel" style="margin-bottom:14px"><div class="pnh"><h3>🗓️ Holidays / Off Days</h3><button class="btn btn-teal btn-sm" onclick="addHoliday()">+ Add</button></div>
+    <div class="pnb">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Add upcoming holidays. On these days, Managers & Agents cannot access the system.</div>
+      <div class="fg2" style="margin-bottom:10px">
+        <div class="fg"><label>Holiday Date</label><input type="date" id="hol_date" value="${today()}" style="background:var(--bg);border:1.5px solid var(--bg3);border-radius:var(--r);padding:8px 11px;font-size:13px;outline:none"></div>
+        <div class="fg"><label>Label (optional)</label><input type="text" id="hol_label" placeholder="e.g. Diwali" style="background:var(--bg);border:1.5px solid var(--bg3);border-radius:var(--r);padding:8px 11px;font-size:13px;outline:none"></div>
+      </div>
+      <div id="holList">${renderHolidayList()}</div>
+    </div></div>`;
+}
+
+function renderHolidayList(){
+  const acc=LS.get('accessSettings')||{};
+  const hols=acc.holidays||[];
+  if(!hols.length)return'<div style="font-size:13px;color:var(--muted)">No holidays added yet.</div>';
+  return`<div style="display:flex;flex-direction:column;gap:6px">${hols.map((h,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 11px;background:var(--bg);border-radius:8px;border:1px solid var(--bg3)"><span style="font-size:18px">📅</span><div style="flex:1"><div style="font-weight:700">${fmtD(typeof h==='object'?h.date:h)}</div><div style="font-size:11px;color:var(--muted)">${typeof h==='object'?h.label||'Holiday':''}</div></div><button class="btn btn-red btn-xs" onclick="removeHoliday(${i})">🗑️</button></div>`).join('')}</div>`;
+}
+
+function addHoliday(){
+  const date=document.getElementById('hol_date').value;
+  const label=document.getElementById('hol_label').value;
+  if(!date){toast('⚠️ Select date');return;}
+  const acc=LS.get('accessSettings')||{};
+  if(!acc.holidays)acc.holidays=[];
+  acc.holidays.push({date,label});
+  LS.set('accessSettings',acc);
+  document.getElementById('holList').innerHTML=renderHolidayList();
+  toast(`📅 Holiday added: ${fmtD(date)}`);
+}
+
+function removeHoliday(idx){
+  const acc=LS.get('accessSettings')||{};
+  if(!acc.holidays)return;
+  acc.holidays.splice(idx,1);
+  LS.set('accessSettings',acc);
+  document.getElementById('holList').innerHTML=renderHolidayList();
+  toast('🗑️ Holiday removed');
+}
+
+function saveAccessSettings(){
+  if(CU?.role!=='admin'){toast('⛔ Admin only');return;}
+  const acc=LS.get('accessSettings')||{};
+  acc.enabled=document.getElementById('acc_enabled').checked;
+  acc.startHour=parseInt(document.getElementById('acc_startH').value)||8;
+  acc.startMin=parseInt(document.getElementById('acc_startM').value)||0;
+  acc.endHour=parseInt(document.getElementById('acc_endH').value)||22;
+  acc.endMin=parseInt(document.getElementById('acc_endM').value)||0;
+  LS.set('accessSettings',acc);
+  toast(`✅ Access hours saved: ${String(acc.startHour).padStart(2,'0')}:${String(acc.startMin).padStart(2,'0')} – ${String(acc.endHour).padStart(2,'0')}:${String(acc.endMin).padStart(2,'0')}`);
+  renderAccess();
+}
+
+function activateOverride(){
+  const acc=LS.get('accessSettings')||{};
+  acc.overrideUntil=Date.now()+8*3600000;
+  LS.set('accessSettings',acc);
+  toast('⚡ Override active for 8 hours!');renderAccess();
+}
+
+function cancelOverride(){
+  const acc=LS.get('accessSettings')||{};
+  acc.overrideUntil=null;
+  LS.set('accessSettings',acc);
+  toast('Override cancelled');renderAccess();
+}
+
+// ══ USERS ══
+function updateUserRoleNote(){const r=document.getElementById('u_role')?.value;const el=document.getElementById('uRoleNote');if(el&&r)el.textContent={partner:'View access + salary edit if permitted',manager:'Operational access + flag customers + corrections',agent:'Own collection + self-correction'}[r]||'';}
+function renderUsers(){
+  if(CU?.role!=='admin'){document.getElementById('pg-users').innerHTML=`<div class="empty"><div class="empty-ic">🔒</div><p>Admin only</p></div>`;return;}
+  const users=LS.col('users'),brs=LS.col('branches'),bf=LS.get('branchFunds')||{};
+  document.getElementById('pg-users').innerHTML=`
+    <div class="ph"><div class="ph-txt"><h2>Team</h2></div><div class="ph-acts"><button class="btn btn-ghost btn-sm" onclick="openBranchModal()">🏢 Branch</button><button class="btn btn-teal" onclick="openUserModal()">+ Member</button></div></div>
+    ${!brs.length?`<div class="no-branch"><div style="font-size:28px;margin-bottom:7px">🏢</div><button class="btn btn-teal" onclick="openBranchModal()">+ Add Branch</button></div>`:''}
+    <div class="panel" style="margin-bottom:13px"><div class="pnh"><h3>🏢 Branches</h3><button class="btn btn-ghost btn-sm" onclick="openBranchModal()">+ Add</button></div>
+    <div class="tw"><table><thead><tr><th>Code</th><th>Name</th><th>Manager</th><th>Fund</th></tr></thead>
+    <tbody>${brs.length?brs.map(b=>`<tr><td style="font-weight:800;color:var(--teal)">${b.code||b.id}</td><td style="font-weight:700">${b.name}</td><td>${b.manager||'—'}</td><td style="font-weight:800;color:var(--teal2)">${INR(bf[b.id]||0)}</td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:14px">No branches</td></tr>'}</tbody></table></div></div>
+    <div class="panel"><div class="pnh"><h3>👥 Members</h3></div>
+    <div class="tw"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Branch</th><th>Salary</th><th>Del</th></tr></thead>
+    <tbody>${users.map(u=>`<tr><td style="font-weight:700">${u.name}</td><td style="font-size:12px;color:var(--muted)">${u.email}</td><td><span style="font-size:10px;font-weight:800;padding:2px 7px;border-radius:20px;background:var(--bg2);color:var(--muted)">${u.role.toUpperCase()}</span></td><td style="font-size:12px">${brs.find(b=>b.id===u.branch)?.name||'—'}</td><td style="font-weight:700;color:var(--green)">${u.salary?INR(u.salary)+'/mo':'—'}</td><td>${u.role!=='admin'?`<button class="btn btn-red btn-xs" onclick="delUser('${u.id}','${u.name}')">🗑️</button>`:'🔒'}</td></tr>`).join('')}</tbody></table></div></div>`;
+}
+function openUserModal(){['u_name','u_email','u_pass','u_empid','u_phone','u_aadh','u_pan','u_salary'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('u_role').value='agent';document.getElementById('u_join').value=today();['uPhotoP','uAadhP'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});fillBranchSelects();updateUserRoleNote();OM('mUser');}
+async function saveUser(){if(CU?.role!=='admin'){toast('⛔ Admin only');return;}const name=document.getElementById('u_name').value.trim(),email=document.getElementById('u_email').value.trim(),pass=document.getElementById('u_pass').value.trim();if(!name||!email||!pass){toast('⚠️ Required fields');return;}if(LS.col('users').find(u=>u.email===email)){toast('⚠️ Email exists');return;}const role=document.getElementById('u_role').value;const empId=document.getElementById('u_empid').value||`NK-${role.slice(0,3).toUpperCase()}-${Date.now().toString().slice(-4)}`;const [photoUrl,aadhUrl]=await Promise.all([saveImg('u_photo',`emp_photo_${empId}`),saveImg('u_aadhImg',`emp_aadh_${empId}`)]);LS.push('users',{id:nkId(),name,email,password:pass,role,branch:document.getElementById('u_branch').value||'',empId,phone:document.getElementById('u_phone').value,joinDate:document.getElementById('u_join').value,salary:parseFloat(document.getElementById('u_salary').value)||0,aadhaarNum:document.getElementById('u_aadh').value,panNum:document.getElementById('u_pan').value,photo:photoUrl,aadhaarImg:aadhUrl,createdBy:CU?.id,createdAt:nowTs()});CM('mUser');toast(`✅ ${name} added`);renderUsers();}
+function delUser(id,name){if(!confirm(`Remove ${name}?`))return;LS.del('users',id);toast('🗑️');renderUsers();}
+function openBranchModal(){['br_name','br_code','br_addr','br_mgr','br_ph'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});OM('mBranch');}
+function saveBranch(){if(CU?.role!=='admin'){toast('⛔ Admin only');return;}const name=document.getElementById('br_name').value.trim(),code=document.getElementById('br_code').value.trim().toUpperCase();if(!name||!code){toast('⚠️ Required');return;}if(branches.find(b=>b.id===code)){toast('⚠️ Code exists');return;}const br={id:code,name,code,address:document.getElementById('br_addr').value,manager:document.getElementById('br_mgr').value,phone:document.getElementById('br_ph').value};DB.set('branches',code,br);branches.push(br);if(!activeBranch||activeBranch==='all')activeBranch=code;buildBranchSwitcher();fillBranchSelects();CM('mBranch');toast(`🏢 "${name}" added!`);refreshCurrentPage();}
+
+// ══ PERMISSIONS ══
+function renderPerms(){
+  if(CU?.role!=='admin'){document.getElementById('pg-perms').innerHTML=`<div class="empty"><div class="empty-ic">🔒</div><p>Admin only</p></div>`;return;}
+  const rp=LS.get('rolePerms')||{};const roles=['partner','manager','agent'];const clr={partner:'var(--blue)',manager:'var(--teal)',agent:'var(--muted)'};
+  document.getElementById('pg-perms').innerHTML=`
+    <div class="ph"><div class="ph-txt"><h2>🔐 Permissions</h2></div><div class="ph-acts"><button class="btn btn-teal" onclick="savePerms()">💾 Save</button></div></div>
+    <div style="background:var(--gold2);border:1px solid #fde68a;border-radius:var(--r);padding:10px 13px;margin-bottom:16px;font-size:13px;color:var(--gold3)">⚠️ Admin always has full access.</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:13px">
+      ${roles.map(role=>`<div class="panel"><div class="pnh"><h3 style="color:${clr[role]}">${role.charAt(0).toUpperCase()+role.slice(1)}</h3></div>
+        <div style="padding:11px 13px">${PERM_DEFS.map(p=>{const chk=(rp[role]||{})[p.k]||false;return`<div class="perm-row"><span style="font-size:12px;font-weight:600">${p.l}</span><label class="tog"><input type="checkbox" id="pm_${role}_${p.k}" ${chk?'checked':''}><span class="ts"></span></label></div>`;}).join('')}</div>
+        <div style="padding:9px 13px;border-top:1px solid var(--bg3);display:flex;gap:6px"><button class="btn btn-ghost btn-sm" onclick="resetPerms('${role}')">↩️ Reset</button><button class="btn btn-teal btn-sm" onclick="fullPerms('${role}')">📋 Full</button></div>
+      </div>`).join('')}
+    </div>`;
+}
+function savePerms(){const rp={};['partner','manager','agent'].forEach(role=>{rp[role]={};PERM_DEFS.forEach(p=>{const el=document.getElementById(`pm_${role}_${p.k}`);if(el)rp[role][p.k]=el.checked;});});LS.set('rolePerms',rp);toast('✅ Saved!');}
+function resetPerms(role){const rp=LS.get('rolePerms')||{};delete rp[role];LS.set('rolePerms',rp);renderPerms();toast(`↩️ ${role} reset`);}
+function fullPerms(role){const rp=LS.get('rolePerms')||{};rp[role]=Object.fromEntries(PERM_DEFS.map(p=>[p.k,true]));LS.set('rolePerms',rp);renderPerms();toast(`📋 Full access for ${role}`);}
+
+// ══ REPORTS ══
+function renderReports(){
+  if(!can('reports')){document.getElementById('pg-reports').innerHTML=`<div class="empty"><div class="empty-ic">🔒</div><p>Access restricted</p></div>`;return;}
+  let loans=DB.getAll('loans'),exps=DB.getAll('expenses');
+  if(activeBranch!=='all'){loans=loans.filter(l=>l.branch===activeBranch);exps=exps.filter(e=>e.branch===activeBranch);}
+  const active=loans.filter(l=>!l.completed),done=loans.filter(l=>l.completed);
+  const interest=done.reduce((s,l)=>{const pd=Object.values(l.payments||{}).filter(v=>v==='paid').length;return s+(pd*(EMIS[l.amount]||0))-l.amount;},0);
+  const totalExp=exps.reduce((s,e)=>s+e.amount,0);
+  const bf=LS.get('branchFunds')||{};
+  const fund=activeBranch==='all'?Object.values(bf).reduce((s,v)=>s+(v||0),0):(bf[activeBranch]||0);
+  const mm={};
+  loans.forEach(l=>{const m=(l.startDate||'').slice(0,7);if(!mm[m])mm[m]={income:0,count:0,exp:0,disbursed:0,disbCount:0};mm[m].count++;mm[m].disbursed+=l.amount;});
+  loans.forEach(l=>{Object.entries(l.payments||{}).forEach(([date,status])=>{if(status!=='paid')return;const m=date.slice(0,7);if(!mm[m])mm[m]={income:0,count:0,exp:0,disbursed:0,disbCount:0};mm[m].income+=(EMIS[l.amount]||0);});});
+  exps.forEach(e=>{const m=(e.date||'').slice(0,7);if(!mm[m])mm[m]={income:0,count:0,exp:0,disbursed:0,disbCount:0};mm[m].exp+=e.amount;});
+  const months=Object.keys(mm).sort().reverse();
+  document.getElementById('pg-reports').innerHTML=`
+    <div class="ph"><div class="ph-txt"><h2>Reports</h2></div><div class="ph-acts"><button class="btn btn-ghost btn-sm" onclick="downloadMonthlyReport()">⬇️ Download</button></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px">
+      <div class="panel"><div class="pnh"><h3>📊 P&L Overview</h3></div><div class="pnb">
+        <div class="sr2"><span class="sr2-l">Total Loans</span><span class="sr2-v">${loans.length}</span></div>
+        <div class="sr2"><span class="sr2-l">Active</span><span class="sr2-v" style="color:var(--blue)">${active.length}</span></div>
+        <div class="sr2"><span class="sr2-l">Completed</span><span class="sr2-v" style="color:var(--green)">${done.length}</span></div>
+        <div class="sr2"><span class="sr2-l">Early Closed</span><span class="sr2-v" style="color:var(--green)">${done.filter(l=>l.closedEarly).length}</span></div>
+        <div class="sr2"><span class="sr2-l">Blacklisted (90+)</span><span class="sr2-v" style="color:var(--red)">${active.filter(l=>getOverdueDays(l)>=90).length}</span></div>
+        <div class="sr2"><span class="sr2-l">Interest Earned</span><span class="sr2-v" style="color:var(--green)">${INR(interest)}</span></div>
+        <div class="sr2"><span class="sr2-l">Total Expenses</span><span class="sr2-v" style="color:var(--red)">${INR(totalExp)}</span></div>
+        <div style="margin-top:8px;padding:10px;background:${interest-totalExp>=0?'var(--green2)':'var(--red2)'};border-radius:var(--r);display:flex;justify-content:space-between;align-items:center">
+          <span style="font-weight:700">Net Profit</span>
+          <span style="font-weight:800;font-size:18px;color:${interest-totalExp>=0?'var(--green)':'var(--red)'}">${INR(interest-totalExp)}</span>
+        </div>
+      </div></div>
+      <div class="panel"><div class="pnh"><h3>💰 Fund</h3></div><div class="pnb">
+        <div class="sr2"><span class="sr2-l">Available</span><span class="sr2-v" style="color:var(--teal)">${INR(fund)}</span></div>
+        <div class="sr2"><span class="sr2-l">Deployed</span><span class="sr2-v" style="color:var(--blue)">${INR(active.reduce((s,l)=>s+l.amount,0))}</span></div>
+        <div class="sr2"><span class="sr2-l">Total Assets</span><span class="sr2-v">${INR(fund+active.reduce((s,l)=>s+l.amount,0))}</span></div>
+      </div></div>
+    </div>
+None
